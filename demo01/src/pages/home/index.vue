@@ -1,11 +1,12 @@
 <template>
-    <div class="common-layout">
+    <div>
         <el-container>
-            <Home />
+            <Top />
+            <el-main>Main</el-main>
         </el-container>
     </div>
 </template>
-
-<script lang="ts" setup>
-import Home from './home/index.vue';
+<script setup lang="ts">
+import Top from './top/index.vue';
 </script>
+<style scoped lang="scss"></style>

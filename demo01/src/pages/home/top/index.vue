@@ -19,6 +19,7 @@
 <style scoped lang="scss">
 .top {
     position: fixed;
+    float: right;
     width: 100%;
     height: 52px;
     background: #fff;

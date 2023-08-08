@@ -1,5 +1,5 @@
 <template>
-    <el-menu default-active="2" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#545c64"
+    <el-menu default-active="2" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#576576"
         text-color="#fff" @open="handleOpen" @close="handleClose">
 
         <el-menu-item index="1">
@@ -10,19 +10,19 @@
         </el-menu-item>
         <el-menu-item index="2">
             <el-icon><icon-menu /></el-icon>
-            <template #title>Navigator Two</template>
+            <template #title>终端管理</template>
         </el-menu-item>
         <el-menu-item index="3">
             <el-icon>
                 <document />
             </el-icon>
-            <template #title>Navigator Three</template>
+            <template #title>策略管理</template>
         </el-menu-item>
         <el-menu-item index="4">
             <el-icon>
                 <setting />
             </el-icon>
-            <template #title>Navigator Four</template>
+            <template #title>审批管理</template>
         </el-menu-item>
     </el-menu>
 </template>
@@ -44,7 +44,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 1200px;
+    width: 180px;
+    height: 100vh;
 }
 </style>

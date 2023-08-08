@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <lMenu />
-    <home />
+  <div class="container">
+    <Menu></Menu>
+    <div class="context">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import home from "./pages/home/index.vue";
-import lMenu from "./components/menu/index.vue"
+// import home from "./pages/home/index.vue";
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.container {
+  display: flex;
+}
+</style>
