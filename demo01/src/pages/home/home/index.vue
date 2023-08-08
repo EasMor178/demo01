@@ -1,7 +1,16 @@
 <template>
-    <div>123456</div>
+    <div>
+        <el-container>
+            <Top />
+            <el-main>Main</el-main>
+        </el-container>
+    </div>
 </template>
 <script setup lang="ts">
-
+import Top from './top/index.vue';
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.header {
+    background: #000;
+}
+</style>
