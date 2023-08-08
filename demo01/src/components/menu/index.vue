@@ -1,6 +1,6 @@
 <template>
     <el-menu default-active="2" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#576576"
-        text-color="#fff" @open="handleOpen" @close="handleClose">
+        :collapse="isCollapse" text-color="#fff" @open="handleOpen" @close="handleClose">
 
         <el-menu-item index="1">
             <el-icon>
@@ -24,16 +24,28 @@
             </el-icon>
             <template #title>审批管理</template>
         </el-menu-item>
+        <el-button>
+            <el-icon @click="isCollapse = !isCollapse">
+                <Fold />
+            </el-icon>
+
+        </el-button>
+
+
     </el-menu>
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import {
     Document,
     Menu as IconMenu,
     SuitcaseLine,
     Setting,
-} from '@element-plus/icons-vue'
+    Fold,
+    // Expand
+} from '@element-plus/icons-vue';
+let isCollapse = ref(false);
 const handleOpen = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
 }
