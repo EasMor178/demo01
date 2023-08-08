@@ -1,6 +1,6 @@
 <template>
     <el-menu default-active="2" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#576576"
-        :collapse="isCollapse" text-color="#fff" @open="handleOpen" @close="handleClose">
+        :collapse="isCollapse" text-color="#fff">
 
         <el-menu-item index="1">
             <el-icon>
@@ -24,12 +24,13 @@
             </el-icon>
             <template #title>审批管理</template>
         </el-menu-item>
-        <el-button>
-            <el-icon @click="isCollapse = !isCollapse">
-                <Fold />
-            </el-icon>
-
-        </el-button>
+        <div class="changeState">
+            <el-button @click="isCollapse = !isCollapse">
+                <el-icon>
+                    <Fold />
+                </el-icon>
+            </el-button>
+        </div>
 
 
     </el-menu>
@@ -46,17 +47,20 @@ import {
     // Expand
 } from '@element-plus/icons-vue';
 let isCollapse = ref(false);
-const handleOpen = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
-}
+
 </script>
 
 <style>
+.el-menu-vertical-demo {
+    height: 100vh;
+}
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 180px;
-    height: 100vh;
+}
+
+.changeState {
+    float: right;
+    margin-right: 10px
 }
 </style>

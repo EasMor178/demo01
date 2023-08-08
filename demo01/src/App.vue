@@ -12,5 +12,9 @@
 <style scoped lang="scss">
 .container {
   display: flex;
+
+  .context {
+    width: 100%;
+  }
 }
 </style>
