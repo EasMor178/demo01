@@ -1,23 +1,15 @@
 <template>
     <div class="bench">
         <el-row :gutter="12">
-            <el-col :span="8">
-                <el-card shadow="hover"> 1234567890</el-card>
-            </el-col>
-            <el-col :span="8">
-                <el-card shadow="hover"> 1234567890</el-card>
-            </el-col>
-            <el-col :span="8">
-                <el-card shadow="hover"> 1234567890</el-card>
-            </el-col>
-        </el-row>
-        <el-row :gutter="12">
-            <el-col :span="12">
-                <el-card shadow="hover"> 1234567890</el-card>
-            </el-col>
-            <el-col :span="12">
-                <el-card shadow="hover"> 1234567890</el-card>
-            </el-col>
+            <el-card class="box-card" v-for="o in 6" :key="o">
+                <template #header>
+                    <div class="card-header">
+                        <span>{{ 'Card ' + o }}</span>
+                        <el-button class="button" text>Operation button</el-button>
+                    </div>
+                </template>
+                <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+            </el-card>
         </el-row>
     </div>
 </template>
@@ -25,8 +17,25 @@
 
 </script>
 <style scoped lang="scss">
-.bench {
-    width: 1000px;
+.el-card {
+    margin: 10px 20px;
+}
 
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text {
+    font-size: 14px;
+}
+
+.item {
+    margin-bottom: 18px;
+}
+
+.box-card {
+    width: 360px;
 }
 </style>

@@ -2,8 +2,7 @@
     <div class="top">
         <div class="content">
             <div class="left">
-                <p class="logoText">tong
-                </p>
+                <p class="logoText">TEST</p>
             </div>
             <div class="right">
                 <p class="help">帮助中心</p>
@@ -18,8 +17,6 @@
   
 <style scoped lang="scss">
 .top {
-    position: fixed;
-    float: right;
     width: 100%;
     height: 52px;
     background: #fff;
@@ -58,9 +55,9 @@
         }
 
         .right {
-            display: flex;
             align-items: center;
             justify-content: center;
+            display: flex;
             font-size: 14px;
 
             .help {
