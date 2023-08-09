@@ -57,10 +57,11 @@ let isCollapse = ref(false);
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 180px;
+    flex-shrink: 0;
 }
 
 .changeState {
     float: right;
-    margin-right: 10px
+    margin-right: 10px;
 }
 </style>

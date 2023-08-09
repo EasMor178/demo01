@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <el-container>
-            <el-header>
-                <Top />
-            </el-header>
-            <el-main>
-                <Bench />
-            </el-main>
-        </el-container>
+    <div class="container">
+        <div class="top">
+            <Top />
+        </div>
+        <div class="main">
+            <Bench />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -15,11 +13,14 @@ import Top from './top/index.vue';
 import Bench from './bench/index.vue';
 </script>
 <style scoped lang="scss">
-.el-container {
+.container {
     min-height: 100vh;
-}
+    display: flex;
+    flex-direction: column;
 
-.el-main {
-    background: #f2f2f2;
+    .main {
+        background: #f2f2f2;
+        flex: 1;
+    }
 }
 </style>

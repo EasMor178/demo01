@@ -32,6 +32,7 @@
         justify-content: space-between;
 
         .left {
+            margin-left: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -55,6 +56,7 @@
         }
 
         .right {
+            margin-right: 10px;
             align-items: center;
             justify-content: center;
             display: flex;

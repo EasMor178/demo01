@@ -35,7 +35,8 @@ import Statistics from "./statistics/index.vue";
 
     .el-card {
         flex: 1;
-        margin: 2px 5px;
+        height: 400px;
+        margin: 5px 5px;
 
         .card-header {
             display: flex;
