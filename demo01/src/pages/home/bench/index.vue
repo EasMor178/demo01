@@ -1,41 +1,47 @@
 <template>
     <div class="bench">
-        <el-row :gutter="12">
-            <el-card class="box-card" v-for="o in 6" :key="o">
-                <template #header>
-                    <div class="card-header">
-                        <span>{{ 'Card ' + o }}</span>
-                        <el-button class="button" text>Operation button</el-button>
-                    </div>
-                </template>
-                <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
-            </el-card>
-        </el-row>
+        <el-card shadow="never">
+            <div class="card-header">
+                <h1>简介</h1>
+                <el-button class="button" text>--</el-button>
+            </div>
+            <ProFile />
+        </el-card>
+        <el-card shadow="never">
+            <div class="card-header">
+                <h1>管理</h1>
+                <el-button class="button" text>--</el-button>
+            </div>
+            <Manage />
+        </el-card>
+        <el-card shadow="never">
+            <div class="card-header">
+                <h1>终端统计</h1>
+                <el-button class="button" text>--</el-button>
+            </div>
+            <Statistics />
+        </el-card>
     </div>
 </template>
 <script setup lang="ts">
-
+import ProFile from "./profile/index.vue";
+import Manage from "./manage/index.vue";
+import Statistics from "./statistics/index.vue";
 </script>
 <style scoped lang="scss">
-.el-card {
-    margin: 10px 20px;
-}
-
-.card-header {
+.bench {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    flex-wrap: wrap;
 
-.text {
-    font-size: 14px;
-}
+    .el-card {
+        flex: 1;
+        margin: 2px 5px;
 
-.item {
-    margin-bottom: 18px;
-}
-
-.box-card {
-    width: 360px;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
 }
 </style>
