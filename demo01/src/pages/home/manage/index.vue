@@ -1,6 +1,6 @@
 <template>
     <div class="manage">
-        <div v-for="o in 6" :key="o" class="item">
+        <div v-for="o in 100" :key="o" class="item">
             <div class="button">
                 <icon-menu style="width: 30px; color: #ff9797;" />
             </div>
@@ -23,8 +23,8 @@ import {
 
 
     .item {
-        min-width: 30%;
-        margin: 5px 5px;
+        min-width: 25%;
+        margin: 5px 10px 20px 10px;
         display: flex;
         align-items: center;
         flex-direction: column;

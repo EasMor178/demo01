@@ -59,6 +59,7 @@ let isCollapse = ref(false);
 
 <style scoped lang="scss">
 .el-menu {
+
     height: 100vh;
 
     .top {
