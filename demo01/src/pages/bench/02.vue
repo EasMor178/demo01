@@ -64,7 +64,7 @@
                 </div>
             </template>
         </draggable>
-        <draggable class="dragArea list-group" :list="list10" group="people" item-key="id">
+        <draggable class="dragArea list-group" :list="list0" group="people" item-key="id">
             <template #item="{ element }">
                 <div class="list-group-item">
                     {{ element.name }}
@@ -90,51 +90,88 @@ export default {
                 { name: "01", id: 3 },
                 { name: "01", id: 3 },
                 { name: "01", id: 3 },
+                { name: "01", id: 3 },
             ],
             list2: [
-                { name: "02", id: 5 },
-                { name: "02", id: 6 },
-                { name: "02", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list3: [
-                { name: "03", id: 5 },
-                { name: "03", id: 6 },
-                { name: "03", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list4: [
-                { name: "04", id: 5 },
-                { name: "04", id: 6 },
-                { name: "04", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list5: [
-                { name: "05", id: 5 },
-                { name: "05", id: 6 },
-                { name: "05", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list6: [
-                { name: "06", id: 5 },
-                { name: "06", id: 6 },
-                { name: "06", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list7: [
-                { name: "07", id: 5 },
-                { name: "07", id: 6 },
-                { name: "07", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list8: [
-                { name: "08", id: 5 },
-                { name: "08", id: 6 },
-                { name: "08", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             list9: [
-                { name: "09", id: 5 },
-                { name: "09", id: 6 },
-                { name: "09", id: 7 }
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
-            list10: [
-                { name: "10", id: 5 },
-                { name: "10", id: 6 },
-                { name: "10", id: 7 }
+            list0: [
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 5 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 6 },
+                { name: "", id: 7 }
             ],
             controlOnStart: true
         };

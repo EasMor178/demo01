@@ -8,8 +8,8 @@ export default createRouter({
       component: () => import("@/pages/home/index.vue"),
     },
     {
-      path: "/others",
-      component: () => import("@/pages/others/index.vue"),
+      path: "/bench",
+      component: () => import("@/pages/bench/index.vue"),
     },
     {
       path: "/",

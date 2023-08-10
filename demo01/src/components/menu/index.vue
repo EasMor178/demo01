@@ -1,5 +1,5 @@
 <template>
-    <el-menu default-active="2" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#576576"
+    <el-menu default-active="1" class="el-menu-vertical-demo" active-text-color="#ffd04b" background-color="#576576"
         :collapse="isCollapse" text-color="#fff">
         <div class="top">
             <div>
@@ -12,11 +12,11 @@
                 <el-icon>
                     <SuitcaseLine />
                 </el-icon>
-                <template #title>工作台</template>
+                <template #title>首页</template>
             </el-menu-item>
-            <el-menu-item index="2" @click="this.$router.push('/others')">
+            <el-menu-item index="2" @click="this.$router.push('/bench')">
                 <el-icon><icon-menu /></el-icon>
-                <template #title>终端管理</template>
+                <template #title>工作台</template>
             </el-menu-item>
             <el-menu-item index="3">
                 <el-icon>
