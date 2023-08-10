@@ -17,6 +17,7 @@
   
 <style scoped lang="scss">
 .top {
+    z-index: 999;
     width: 100%;
     height: 52px;
     background: #fff;

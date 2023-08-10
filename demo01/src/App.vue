@@ -27,8 +27,12 @@ import Menu from "@/components/menu/index.vue";
     flex-direction: column;
     overflow: hidden;
 
+    .top {
+      box-shadow: 0px 12px 8px -12px #000;
+    }
+
     .main {
-      background: #f2f2f2;
+      background: #f9f9f9;
       flex: 1;
       overflow-y: scroll;
     }

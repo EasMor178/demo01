@@ -8,7 +8,7 @@ export default createRouter({
       component: () => import("@/pages/home/index.vue"),
     },
     {
-      path: "/hospital",
+      path: "/others",
       component: () => import("@/pages/others/index.vue"),
     },
     {

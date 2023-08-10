@@ -1,4 +1,7 @@
 <template>
+    <div class="options">
+
+    </div>
     <div class="bench">
 
         <div class="card">
@@ -49,13 +52,23 @@ import Manage from "./manage/index.vue";
 import Statistics from "./statistics/index.vue";
 </script>
 <style scoped lang="scss">
+.options {
+    width: 100%;
+    height: 48px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+
+}
+
 .bench {
     display: flex;
     flex-wrap: wrap;
     height: 100%;
 
 
+
     .card {
+        border: #ddd 1px solid;
         min-width: 25%;
         border-radius: 10px;
         display: flex;

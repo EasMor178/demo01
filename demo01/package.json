@@ -13,11 +13,13 @@
     "sass": "^1.64.2",
     "scss": "^0.2.4",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
     "@vitejs/plugin-vue": "^4.2.3",
+    "less": "^4.2.0",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.1",

@@ -8,15 +8,13 @@
             </div>
         </div>
         <div class="item">
-
-
-            <el-menu-item index="1">
+            <el-menu-item index="1" @click="this.$router.push('/home')">
                 <el-icon>
                     <SuitcaseLine />
                 </el-icon>
                 <template #title>工作台</template>
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="2" @click="this.$router.push('/others')">
                 <el-icon><icon-menu /></el-icon>
                 <template #title>终端管理</template>
             </el-menu-item>
@@ -71,7 +69,7 @@ let isCollapse = ref(false);
             flex: 1;
             display: flex;
             margin: 10px 0;
-            padding: 10px 15px;
+            padding: 10px 17px;
             align-items: center;
 
             img {
@@ -95,7 +93,7 @@ let isCollapse = ref(false);
             height: 30px;
             width: 30px;
             float: right;
-            margin-right: 10px;
+            margin-right: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
