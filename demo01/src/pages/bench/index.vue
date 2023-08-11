@@ -1,14 +1,19 @@
 <template>
-    <div id="app">
-        <div class="parent">
-            <Vue3DraggableResizable v-if="modules[0].isActive" class="module-class" :parent="true"
-                :grid="[moduleGridWidth, moduleGridHeight]" :x="modules[0].x" :y="modules[0].y" :h="modules[0].h"
-                :w="modules[0].w" :z="modules[0].z" @dragging="onDrag" @resizing="onResize" @activated="onActivated(0)">
-                <div class="box">
-                    <span>0000000</span>
-                </div>
-            </Vue3DraggableResizable>
-        </div>
+    <div class="parent">
+        <Vue3DraggableResizable v-if="modules[0].isActive" class="module-class" :parent="true"
+            :grid="[moduleGridWidth, moduleGridHeight]" :x="modules[0].x" :y="modules[0].y" :h="modules[0].h"
+            :w="modules[0].w" :z="modules[0].z" @dragging="onDrag" @resizing="onResize" @activated="onActivated(0)">
+            <div class="box">
+                <span>0000000</span>
+            </div>
+        </Vue3DraggableResizable>
+        <Vue3DraggableResizable v-if="modules[0].isActive" class="module-class" :parent="true"
+            :grid="[moduleGridWidth, moduleGridHeight]" :x="modules[0].x" :y="modules[0].y" :h="modules[0].h"
+            :w="modules[0].w" :z="modules[0].z" @dragging="onDrag" @resizing="onResize" @activated="onActivated(0)">
+            <div class="box">
+                <span>0000000</span>
+            </div>
+        </Vue3DraggableResizable>
     </div>
 </template>
 
@@ -24,8 +29,8 @@ const modules = [
         isActive: true,
         x: 0,
         y: 0,
-        h: 100,
-        w: 100,
+        h: 200,
+        w: 200,
         z: 11,
         moduleName: '',
         fixTitle: ''
