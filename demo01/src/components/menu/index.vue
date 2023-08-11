@@ -8,23 +8,23 @@
             </div>
         </div>
         <div class="item">
-            <el-menu-item index="1" @click="this.$router.push('/home')">
+            <el-menu-item index="1" @click=goHome>
                 <el-icon>
                     <SuitcaseLine />
                 </el-icon>
                 <template #title>首页</template>
             </el-menu-item>
-            <el-menu-item index="2" @click="this.$router.push('/bench')">
+            <el-menu-item index="2" @click=goBench>
                 <el-icon><icon-menu /></el-icon>
                 <template #title>工作台</template>
             </el-menu-item>
-            <el-menu-item index="3">
+            <el-menu-item index="3" @click=goOther01>
                 <el-icon>
                     <document />
                 </el-icon>
                 <template #title>策略管理</template>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="4" @click=goOther02>
                 <el-icon>
                     <setting />
                 </el-icon>
@@ -32,7 +32,7 @@
             </el-menu-item>
         </div>
         <div class="bottom">
-            <div class="button " @click=" isCollapse = !isCollapse">
+            <div class="button " @click=disCollapse>
                 <!-- <el-icon> -->
                 <icon-menu style="width: 20px; color: white;" />
                 <!-- </el-icon> -->
@@ -42,7 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import {
     Document,
     Menu as IconMenu,
@@ -51,7 +50,26 @@ import {
     // Fold,
     // Expand
 } from '@element-plus/icons-vue';
-let isCollapse = ref(false);
+
+import { ref } from "vue";
+const isCollapse = ref<boolean>(false);
+const disCollapse = () => { isCollapse.value = !isCollapse.value };
+
+import { useRouter } from "vue-router";
+let $router = useRouter();
+const goHome = () => {
+    $router.push({ path: "/home" });
+};
+const goBench = () => {
+    $router.push({ path: "/bench" });
+};
+const goOther01 = () => {
+    $router.push({ path: "/other01" });
+};
+const goOther02 = () => {
+    $router.push({ path: "/other02" });
+};
+
 
 </script>
 
