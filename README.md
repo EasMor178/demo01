@@ -16,7 +16,3 @@
 
 1、学习`vue-draggable-resizable`组件的使用方法
 2、使用`vue-draggable-resizable`完成基础的拖拽方块
-
-8.11
-456
-
