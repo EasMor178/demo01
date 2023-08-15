@@ -1,5 +1,5 @@
 <template>
-  <div>{{ counter.count }}</div>
+  <div class="bg-red-400">{{ counter.count }}</div>
   <button @click="countPlus">count++</button>
 </template>
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container1">
     <Menu />
     <div class="context">
       <div class="top">
@@ -17,7 +17,7 @@
 // import home from "./pages/home/index.vue";
 </script>
 <style scoped lang="scss">
-.container {
+.container1 {
   display: flex;
 
   .context {
