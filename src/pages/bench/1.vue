@@ -1,7 +1,5 @@
 <template>
-  <main>
-    <section>spa</section>
-  </main>
+  <span>34567890</span>
 </template>
 <script setup lang="ts"></script>
 <style scoped></style>

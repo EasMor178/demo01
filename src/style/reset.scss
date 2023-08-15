@@ -132,7 +132,7 @@ q {
   quotes: none;
   &:before,
   &:after {
-    content: "";
+    content: '';
     content: none;
   }
 }
@@ -169,7 +169,7 @@ button {
 
 select {
   text-indent: 0.01px;
-  text-overflow: "";
+  text-overflow: '';
 
   border: 0;
   border-radius: 0;
