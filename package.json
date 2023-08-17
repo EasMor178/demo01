@@ -16,8 +16,7 @@
     "scss": "^0.2.4",
     "vue": "^3.3.4",
     "vue-draggable-resizable": "^2.3.0",
-    "vue-router": "^4.2.4",
-    "vue3-draggable-resizable": "^1.6.5"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",

@@ -1,18 +1,17 @@
 <template>
-  <!-- <nav class="options"></nav> -->
+  <nav class="options"></nav>
   <main class="home">
     <div class="card" id="card1">
       <div class="head">
-        <h1>{{ homeDate[0].title }}</h1>
+        <h1>简介</h1>
       </div>
       <div class="body">
-        {{ homeDate[0].content }}
-        <!-- <ProFile /> -->
+        <ProFile />
       </div>
     </div>
     <div class="card" id="card2">
       <div class="head">
-        <h1>{{ homeDate[1].title }}</h1>
+        <h1>管理</h1>
       </div>
       <div class="body">
         <Manage />
@@ -20,7 +19,7 @@
     </div>
     <div class="card" id="card3">
       <div class="head">
-        <h1>{{ homeDate[2].title }}</h1>
+        <h1>终端统计</h1>
       </div>
       <div class="body">
         <Statistics />
@@ -28,7 +27,7 @@
     </div>
     <div class="card" id="card4">
       <div class="head">
-        <h1>{{ homeDate[3].title }}</h1>
+        <h1>Others</h1>
       </div>
       <div class="body">
         <ProFile />
@@ -52,7 +51,7 @@ import { useHomeStore } from '@/store/home';
 
 const homeStore = useHomeStore();
 const homeDate = homeStore.date;
-// console.log(homeDate);
+console.log(homeDate);
 </script>
 <style scoped lang="scss">
 .options {
@@ -64,8 +63,8 @@ const homeDate = homeStore.date;
 
 .home {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(12, 1pr);
+  grid-template-rows: repeat(6, 1pr);
   gap: 10px;
   height: 100%;
 
@@ -76,8 +75,8 @@ const homeDate = homeStore.date;
     flex-direction: column;
     background: #fff;
     flex: 1;
+    max-height: 400px;
     padding: 20px;
-    overflow-y: auto;
 
     .head {
       height: 30px;
@@ -87,8 +86,9 @@ const homeDate = homeStore.date;
 
     .body {
       flex: 1;
-      padding: 20px 0 10px 0;
+      padding: 12px 0;
       overflow-y: auto;
+
       &::-webkit-scrollbar {
         display: none;
         /* Chrome Safari */
@@ -109,7 +109,7 @@ const homeDate = homeStore.date;
   }
   #card4 {
     grid-column: 1/7;
-    grid-row: 4/7;
+    grid-row: 4/8;
   }
   #card5 {
     grid-column: 7/13;

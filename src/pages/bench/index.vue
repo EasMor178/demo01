@@ -4,8 +4,8 @@
       ref="screenContainer"
       class="big-screen-container"
       :style="{
-        width: '1000px',
-        height: '500px',
+        width: '1200px',
+        height: '80vh',
         'background-size': `${moduleGridWidth}px ${moduleGridHeight}px`,
       }"
     >
@@ -64,8 +64,8 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 // import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 // console.log('1234')
 
-let moduleGridWidth = 100;
-let moduleGridHeight = 100;
+let moduleGridWidth = 50;
+let moduleGridHeight = 50;
 let activeIndex: 0;
 // let screenWidth: 0; // 屏幕设置的宽度(画板的宽度)
 // let screenHeight: 0; // 屏幕设置的高度
@@ -87,7 +87,7 @@ const modules = [
   {
     index: 2,
     isActive: true,
-    x: 0,
+    x: 200,
     y: 0,
     h: 200,
     w: 200,
