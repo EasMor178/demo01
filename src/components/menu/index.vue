@@ -14,15 +14,15 @@
       </div>
     </div>
     <div class="item">
-      <el-menu-item index="1" @click="goHome">
+      <el-menu-item index="1" @click="goBench">
         <el-icon>
           <SuitcaseLine />
         </el-icon>
-        <template #title>首页</template>
+        <template #title>工作台</template>
       </el-menu-item>
       <el-menu-item index="2" @click="goBench">
         <el-icon><icon-menu /></el-icon>
-        <template #title>工作台</template>
+        <template #title>管理</template>
       </el-menu-item>
       <el-menu-item index="3" @click="goOther01">
         <el-icon>
@@ -84,9 +84,7 @@ const disCollapse = () => {
 
 import { useRouter } from 'vue-router';
 let $router = useRouter();
-const goHome = () => {
-  $router.push({ path: '/home' });
-};
+
 const goBench = () => {
   $router.push({ path: '/bench' });
 };

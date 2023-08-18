@@ -4,10 +4,6 @@ export default createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/home',
-      component: () => import('@/pages/home/index.vue'),
-    },
-    {
       path: '/bench',
       component: () => import('@/pages/bench/index.vue'),
     },
@@ -21,7 +17,7 @@ export default createRouter({
     },
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/bench',
     },
   ],
   //滚动行为

@@ -1,5 +1,4 @@
 <template>
-  <!-- <nav class="options"></nav> -->
   <main class="home" style="position: relative">
     <div
       :style="{
@@ -103,15 +102,9 @@ import { useHomeStore } from '@/store/home';
 const homeDate = useHomeStore().date;
 </script>
 <style scoped lang="scss">
-.options {
-  width: 100%;
-  height: 48px;
-  background: #ffffff;
-  border-bottom: 1px solid #eee;
-}
-
 .home {
   height: calc(100vh - 53px);
+  overflow-y: scroll;
 
   .card {
     height: 100%;

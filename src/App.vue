@@ -34,7 +34,6 @@
     .main {
       background: #f9f9f9;
       flex: 1;
-      overflow-y: scroll;
     }
   }
 }
