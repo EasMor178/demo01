@@ -28,7 +28,7 @@
             'text-align': 'center',
             'line-height': `${modules[0].h}px`,
           }"
-          >{{ 0 }}</span
+          >{{ modules[0].moduleName }}</span
         >
       </VueDraggableResizable>
       <VueDraggableResizable
@@ -50,7 +50,7 @@
             'text-align': 'center',
             'line-height': `${modules[1].h}px`,
           }"
-          >{{ 1 }}</span
+          >{{ modules[1].moduleName }}</span
         >
       </VueDraggableResizable>
       <VueDraggableResizable
@@ -70,9 +70,9 @@
         <span
           :style="{
             'text-align': 'center',
-            'line-height': `${modules[1].h}px`,
+            'line-height': `${modules[2].h}px`,
           }"
-          >{{ 2 }}</span
+          >{{ modules[2].moduleName }}</span
         >
       </VueDraggableResizable>
       <VueDraggableResizable
@@ -92,9 +92,9 @@
         <span
           :style="{
             'text-align': 'center',
-            'line-height': `${modules[1].h}px`,
+            'line-height': `${modules[3].h}px`,
           }"
-          >{{ 3 }}</span
+          >{{ modules[3].moduleName }}</span
         >
       </VueDraggableResizable>
       <VueDraggableResizable
@@ -114,9 +114,9 @@
         <span
           :style="{
             'text-align': 'center',
-            'line-height': `${modules[1].h}px`,
+            'line-height': `${modules[4].h}px`,
           }"
-          >{{ 4 }}</span
+          >{{ modules[4].moduleName }}</span
         >
       </VueDraggableResizable>
     </div>
@@ -126,21 +126,12 @@
 <script lang="ts" setup>
 import VueDraggableResizable from 'vue-draggable-resizable/src/components/vue-draggable-resizable.vue';
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
-//default styles
-// import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
-// console.log('1234')
 
 import { useHomeStore } from '@/store/home.ts';
 const homeDate = useHomeStore().date;
-console.log(homeDate);
 let moduleGridWidth = 50;
 let moduleGridHeight = 50;
 let activeIndex: 0;
-// let screenWidth: 0; // 屏幕设置的宽度(画板的宽度)
-// let screenHeight: 0; // 屏幕设置的高度
-// let firstScreenHeight: 100;
-// let userScreenWidth: 100;
-// let userScreenHeight: 10;
 const modules = [
   {
     index: 1,
@@ -150,7 +141,7 @@ const modules = [
     h: homeDate[0].rows * moduleGridHeight,
     w: homeDate[0].cols * moduleGridWidth,
     z: 11,
-    moduleName: '',
+    moduleName: homeDate[0].title,
     fixTitle: '',
   },
   {
@@ -161,7 +152,7 @@ const modules = [
     h: homeDate[1].rows * moduleGridHeight,
     w: homeDate[1].cols * moduleGridWidth,
     z: 12,
-    moduleName: '',
+    moduleName: homeDate[1].title,
     fixTitle: '',
   },
   {
@@ -172,7 +163,7 @@ const modules = [
     h: homeDate[2].rows * moduleGridHeight,
     w: homeDate[2].cols * moduleGridWidth,
     z: 12,
-    moduleName: '',
+    moduleName: homeDate[2].title,
     fixTitle: '',
   },
   {
@@ -183,7 +174,7 @@ const modules = [
     h: homeDate[3].rows * moduleGridHeight,
     w: homeDate[3].cols * moduleGridWidth,
     z: 12,
-    moduleName: '',
+    moduleName: homeDate[3].title,
     fixTitle: '',
   },
   {
@@ -194,45 +185,25 @@ const modules = [
     h: homeDate[4].rows * moduleGridHeight,
     w: homeDate[4].cols * moduleGridWidth,
     z: 12,
-    moduleName: '',
+    moduleName: homeDate[4].title,
     fixTitle: '',
   },
 ];
-function onResize(left, top, width, height) {
+const onResize = (left, top, width, height) => {
   homeDate[activeIndex].x = left / 50;
   homeDate[activeIndex].y = top / 50;
   homeDate[activeIndex].cols = width / 50;
   homeDate[activeIndex].rows = height / 50;
-}
-function onDrag(left, top) {
+};
+const onDrag = (left, top) => {
   homeDate[activeIndex].x = left / 50;
   homeDate[activeIndex].y = top / 50;
-}
-function onActivated(index) {
+};
+const onActivated = (index) => {
   activeIndex = index;
-  // if (index < 3) {
-  //     this.$refs.singleTable.bodyWrapper.scrollTop = 0
-  // } else {
-  //     this.$refs.singleTable.bodyWrapper.scrollTop = (index - 1) * 57
-  // }
-  // // 标记被选中的行
-  // this.$refs.singleTable.setCurrentRow(this.modules[index])
-}
+};
 </script>
 <style scoped lang="scss">
-.parent {
-  width: 80%;
-  height: 80%;
-  position: absolute;
-  border: 1px solid #000;
-  user-select: none;
-}
-
-.moduleSpan {
-  align-self: center;
-  justify-self: center;
-}
-
 .big-screen {
   position: relative;
   display: grid;
@@ -256,45 +227,10 @@ function onActivated(index) {
       background-color: #dfdfdf;
       border: 1px solid #6c6c6c;
       color: #000000;
-      font-size: 50px;
+      font-size: 30px;
       font-weight: bold;
       font-family: YouYuan;
     }
-  }
-
-  .setting-table {
-    grid-column-start: 1;
-    grid-column-end: 5;
-    grid-row-start: 8;
-    grid-row-end: 11;
-  }
-
-  .module-settings {
-    display: flex;
-    grid-column-start: span 4;
-    justify-content: space-between;
-    padding-top: 1em;
-    font-size: 20px;
-  }
-
-  .screen-button {
-    grid-column-start: 4;
-    padding-top: 1em;
-  }
-
-  .dl-icon {
-    font-size: 20px;
-  }
-
-  &.screenfull {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2000;
-    background-color: #f0f2f5;
-    overflow: auto;
   }
 }
 </style>
