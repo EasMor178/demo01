@@ -1,45 +1,95 @@
 <template>
   <!-- <nav class="options"></nav> -->
-  <main class="home">
-    <div class="card" id="card1">
-      <div class="head">
-        <h1>{{ homeDate[0].title }}</h1>
-      </div>
-      <div class="body">
-        {{ homeDate[0].content }}
-        <!-- <ProFile /> -->
-      </div>
-    </div>
-    <div class="card" id="card2">
-      <div class="head">
-        <h1>{{ homeDate[1].title }}</h1>
-      </div>
-      <div class="body">
-        <Manage />
-      </div>
-    </div>
-    <div class="card" id="card3">
-      <div class="head">
-        <h1>{{ homeDate[2].title }}</h1>
-      </div>
-      <div class="body">
-        <Statistics />
+  <main class="home" style="position: relative">
+    <div
+      :style="{
+        width: homeDate[0].cols * 8.3333 + '%',
+        height: homeDate[0].rows * 16.6666 + '%',
+        left: homeDate[0].x * 8.3333 + '%',
+        top: homeDate[0].y * 16.6666 + '%',
+      }"
+      style="position: absolute; padding: 10px 10px 0 10px"
+    >
+      <div class="card">
+        <div class="head">
+          <h1>{{ homeDate[0].title }}</h1>
+        </div>
+        <div class="body">
+          <span v-html="homeDate[0].content"></span>
+          <!-- <ProFile /> -->
+        </div>
       </div>
     </div>
-    <div class="card" id="card4">
-      <div class="head">
-        <h1>{{ homeDate[3].title }}</h1>
-      </div>
-      <div class="body">
-        <ProFile />
+    <div
+      :style="{
+        width: homeDate[1].cols * 8.3333 + '%',
+        height: homeDate[1].rows * 16.6666 + '%',
+        left: homeDate[1].x * 8.3333 + '%',
+        top: homeDate[1].y * 16.6666 + '%',
+      }"
+      style="position: absolute; padding: 10px 10px 0 10px"
+    >
+      <div class="card">
+        <div class="head">
+          <h1>{{ homeDate[1].title }}</h1>
+        </div>
+        <div class="body">
+          <Manage />
+        </div>
       </div>
     </div>
-    <div class="card" id="card5">
-      <div class="head">
-        <h1>Others</h1>
+    <div
+      :style="{
+        width: homeDate[2].cols * 8.3333 + '%',
+        height: homeDate[2].rows * 16.6666 + '%',
+        left: homeDate[2].x * 8.3333 + '%',
+        top: homeDate[2].y * 16.6666 + '%',
+      }"
+      style="position: absolute; padding: 10px 10px 0 10px"
+    >
+      <div class="card">
+        <div class="head">
+          <h1>{{ homeDate[2].title }}</h1>
+        </div>
+        <div class="body">
+          <Statistics />
+        </div>
       </div>
-      <div class="body">
-        <ProFile />
+    </div>
+    <div
+      :style="{
+        width: homeDate[3].cols * 8.3333 + '%',
+        height: homeDate[3].rows * 16.6666 + '%',
+        left: homeDate[3].x * 8.3333 + '%',
+        top: homeDate[3].y * 16.6666 + '%',
+      }"
+      style="position: absolute; padding: 10px 10px 0 10px"
+    >
+      <div class="card">
+        <div class="head">
+          <h1>{{ homeDate[3].title }}</h1>
+        </div>
+        <div class="body">
+          <ProFile />
+        </div>
+      </div>
+    </div>
+    <div
+      :style="{
+        width: homeDate[4].cols * 8.3333 + '%',
+        height: homeDate[4].rows * 16.6666 + '%',
+        left: homeDate[4].x * 8.3333 + '%',
+        top: homeDate[4].y * 16.6666 + '%',
+      }"
+      style="position: absolute; padding: 10px 10px 0 10px"
+    >
+      <div class="card">
+        <div class="head">
+          <h1>{{ homeDate[4].title }}</h1>
+        </div>
+        <div class="body">
+          <ProFile />
+        </div>
       </div>
     </div>
   </main>
@@ -50,9 +100,7 @@ import Manage from './manage/index.vue';
 import Statistics from './statistics/index.vue';
 import { useHomeStore } from '@/store/home';
 
-const homeStore = useHomeStore();
-const homeDate = homeStore.date;
-// console.log(homeDate);
+const homeDate = useHomeStore().date;
 </script>
 <style scoped lang="scss">
 .options {
@@ -63,30 +111,23 @@ const homeDate = homeStore.date;
 }
 
 .home {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 10px;
-  height: 100%;
+  height: calc(100vh - 53px);
 
   .card {
+    height: 100%;
     border: #ddd 1px solid;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     background: #fff;
-    flex: 1;
     padding: 20px;
-    overflow-y: auto;
 
     .head {
       height: 30px;
       flex-shrink: 0;
-      // padding: 15px 0 0 0;
     }
 
     .body {
-      flex: 1;
       padding: 20px 0 10px 0;
       overflow-y: auto;
       &::-webkit-scrollbar {
@@ -94,26 +135,6 @@ const homeDate = homeStore.date;
         /* Chrome Safari */
       }
     }
-  }
-  #card1 {
-    grid-column: 1/5;
-    grid-row: 1/4;
-  }
-  #card2 {
-    grid-column: 5/9;
-    grid-row: 1/4;
-  }
-  #card3 {
-    grid-column: 9/13;
-    grid-row: 1/4;
-  }
-  #card4 {
-    grid-column: 1/7;
-    grid-row: 4/7;
-  }
-  #card5 {
-    grid-column: 7/13;
-    grid-row: 4/7;
   }
 }
 </style>

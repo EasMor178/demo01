@@ -4,8 +4,8 @@
       ref="screenContainer"
       class="big-screen-container"
       :style="{
-        width: '1200px',
-        height: '80vh',
+        width: '600px',
+        height: '600px',
         'background-size': `${moduleGridWidth}px ${moduleGridHeight}px`,
       }"
     >
@@ -28,7 +28,7 @@
             'text-align': 'center',
             'line-height': `${modules[0].h}px`,
           }"
-          >{{ 1 }}</span
+          >{{ 0 }}</span
         >
       </VueDraggableResizable>
       <VueDraggableResizable
@@ -50,7 +50,73 @@
             'text-align': 'center',
             'line-height': `${modules[1].h}px`,
           }"
+          >{{ 1 }}</span
+        >
+      </VueDraggableResizable>
+      <VueDraggableResizable
+        v-if="modules[2].isActive"
+        class="module-class"
+        :parent="true"
+        :grid="[moduleGridWidth, moduleGridHeight]"
+        :x="modules[2].x"
+        :y="modules[2].y"
+        :h="modules[2].h"
+        :w="modules[2].w"
+        :z="modules[2].z"
+        @dragging="onDrag"
+        @resizing="onResize"
+        @activated="onActivated(2)"
+      >
+        <span
+          :style="{
+            'text-align': 'center',
+            'line-height': `${modules[1].h}px`,
+          }"
           >{{ 2 }}</span
+        >
+      </VueDraggableResizable>
+      <VueDraggableResizable
+        v-if="modules[3].isActive"
+        class="module-class"
+        :parent="true"
+        :grid="[moduleGridWidth, moduleGridHeight]"
+        :x="modules[3].x"
+        :y="modules[3].y"
+        :h="modules[3].h"
+        :w="modules[3].w"
+        :z="modules[3].z"
+        @dragging="onDrag"
+        @resizing="onResize"
+        @activated="onActivated(3)"
+      >
+        <span
+          :style="{
+            'text-align': 'center',
+            'line-height': `${modules[1].h}px`,
+          }"
+          >{{ 3 }}</span
+        >
+      </VueDraggableResizable>
+      <VueDraggableResizable
+        v-if="modules[4].isActive"
+        class="module-class"
+        :parent="true"
+        :grid="[moduleGridWidth, moduleGridHeight]"
+        :x="modules[4].x"
+        :y="modules[4].y"
+        :h="modules[4].h"
+        :w="modules[4].w"
+        :z="modules[4].z"
+        @dragging="onDrag"
+        @resizing="onResize"
+        @activated="onActivated(4)"
+      >
+        <span
+          :style="{
+            'text-align': 'center',
+            'line-height': `${modules[1].h}px`,
+          }"
+          >{{ 4 }}</span
         >
       </VueDraggableResizable>
     </div>
@@ -64,6 +130,9 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 // import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 // console.log('1234')
 
+import { useHomeStore } from '@/store/home.ts';
+const homeDate = useHomeStore().date;
+console.log(homeDate);
 let moduleGridWidth = 50;
 let moduleGridHeight = 50;
 let activeIndex: 0;
@@ -75,36 +144,69 @@ let activeIndex: 0;
 const modules = [
   {
     index: 1,
-    isActive: true,
-    x: 0,
-    y: 0,
-    h: 200,
-    w: 200,
+    isActive: homeDate[0].default,
+    x: homeDate[0].x * moduleGridWidth,
+    y: homeDate[0].y * moduleGridHeight,
+    h: homeDate[0].rows * moduleGridHeight,
+    w: homeDate[0].cols * moduleGridWidth,
     z: 11,
     moduleName: '',
     fixTitle: '',
   },
   {
     index: 2,
-    isActive: true,
-    x: 200,
-    y: 0,
-    h: 200,
-    w: 200,
+    isActive: homeDate[1].default,
+    x: homeDate[1].x * moduleGridWidth,
+    y: homeDate[1].y * moduleGridHeight,
+    h: homeDate[1].rows * moduleGridHeight,
+    w: homeDate[1].cols * moduleGridWidth,
+    z: 12,
+    moduleName: '',
+    fixTitle: '',
+  },
+  {
+    index: 3,
+    isActive: homeDate[2].default,
+    x: homeDate[2].x * moduleGridWidth,
+    y: homeDate[2].y * moduleGridHeight,
+    h: homeDate[2].rows * moduleGridHeight,
+    w: homeDate[2].cols * moduleGridWidth,
+    z: 12,
+    moduleName: '',
+    fixTitle: '',
+  },
+  {
+    index: 4,
+    isActive: homeDate[3].default,
+    x: homeDate[3].x * moduleGridWidth,
+    y: homeDate[3].y * moduleGridHeight,
+    h: homeDate[3].rows * moduleGridHeight,
+    w: homeDate[3].cols * moduleGridWidth,
+    z: 12,
+    moduleName: '',
+    fixTitle: '',
+  },
+  {
+    index: 5,
+    isActive: homeDate[4].default,
+    x: homeDate[4].x * moduleGridWidth,
+    y: homeDate[4].y * moduleGridHeight,
+    h: homeDate[4].rows * moduleGridHeight,
+    w: homeDate[4].cols * moduleGridWidth,
     z: 12,
     moduleName: '',
     fixTitle: '',
   },
 ];
 function onResize(left, top, width, height) {
-  modules[activeIndex].x = left;
-  modules[activeIndex].y = top;
-  modules[activeIndex].w = width;
-  modules[activeIndex].h = height;
+  homeDate[activeIndex].x = left / 50;
+  homeDate[activeIndex].y = top / 50;
+  homeDate[activeIndex].cols = width / 50;
+  homeDate[activeIndex].rows = height / 50;
 }
 function onDrag(left, top) {
-  modules[activeIndex].x = left;
-  modules[activeIndex].y = top;
+  homeDate[activeIndex].x = left / 50;
+  homeDate[activeIndex].y = top / 50;
 }
 function onActivated(index) {
   activeIndex = index;
@@ -136,7 +238,7 @@ function onActivated(index) {
   display: grid;
   padding: 1em;
   height: calc(100vh - 130px);
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: repeat(10, 10%);
   grid-template-rows: repeat(10, 10%);
 
   .big-screen-container {
@@ -146,15 +248,15 @@ function onActivated(index) {
     background: linear-gradient(-90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
       linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     border: 1px solid blue;
-    grid-column-start: span 4;
+    grid-column-start: span 6;
     grid-row-start: span 6;
 
     .module-class {
       display: inline-grid;
-      background-color: #808080;
-      border: 1px solid #000;
-      color: #fff;
-      font-size: 20px;
+      background-color: #dfdfdf;
+      border: 1px solid #6c6c6c;
+      color: #000000;
+      font-size: 50px;
       font-weight: bold;
       font-family: YouYuan;
     }
