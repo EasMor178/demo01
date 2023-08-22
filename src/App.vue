@@ -27,9 +27,9 @@
     flex-direction: column;
     overflow: hidden;
 
-    .top {
-      box-shadow: 0px 12px 8px -12px #000;
-    }
+    // .top {
+    //   // box-shadow: 0px 12px 8px -12px #000;
+    // }
 
     .main {
       background: #f9f9f9;

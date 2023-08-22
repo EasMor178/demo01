@@ -1,5 +1,5 @@
 <template>
-  <nav class="options">
+  <nav>
     <span>123</span>
     <el-button @click="changeHome" type="primary">编辑/首页</el-button>
   </nav>
@@ -18,7 +18,7 @@ const changeHome = () => {
 };
 </script>
 <style scoped lang="scss">
-.options {
+nav {
   width: 100%;
   height: 48px;
   background: #ffffff;
@@ -27,5 +27,9 @@ const changeHome = () => {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+}
+main {
+  height: 100%;
+  width: 100%;
 }
 </style>

@@ -103,7 +103,7 @@ const homeDate = useHomeStore().date;
 </script>
 <style scoped lang="scss">
 .home {
-  height: calc(100vh - 53px);
+  height: calc(100vh - 110px);
   overflow-y: scroll;
 
   .card {
