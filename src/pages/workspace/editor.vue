@@ -28,12 +28,12 @@
         </VueDraggableResizable>
       </template>
     </div>
-    <!-- <div class="widget-settings">
+    <div class="widget-settings">
       <div class="setting-header">
-        <span style="margin-right: 15px; z-index: 1">组件设置 </span>
+        <span style="margin-right: 20px; z-index: 1"> 组件设置 </span>
         <el-select
           v-model="selectedModuleType"
-          style="width: 150px; margin-right: 2px"
+          style="width: 170px; margin-right: 5px"
           placeholder="组件类型"
           clearable
         >
@@ -44,7 +44,7 @@
             :value="item.type"
           />
         </el-select>
-        <el-button title="新增" text style="border: none" @click="onAddWidget">
+        <el-button title="新增" @click="onAddWidget">
           <el-icon>
             <Plus />
           </el-icon>
@@ -71,7 +71,7 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template #default="scope">
-              <el-button @click.native.prevent="onDeleteWidget(scope.row)">
+              <el-button @click.prevent="onDeleteWidget(scope.row)">
                 <el-icon>
                   <Delete />
                 </el-icon>
@@ -80,15 +80,16 @@
           </el-table-column>
         </el-table>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import VueDraggableResizable from 'vue-draggable-resizable/src/components/vue-draggable-resizable.vue';
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
-// import { ElMessage, ElMessageBox } from 'element-plus';
-import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue';
+import { Plus, Delete } from '@element-plus/icons-vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue';
 import { useHomeStore } from '@/store/home.ts';
 const homeDate = useHomeStore().date;
 
@@ -96,7 +97,7 @@ let gridWidth = ref(0); //一格的宽度
 let gridHeight = ref(0); //一格的高度
 let designWidth = ref(0); // 定制框的宽度
 let designHeight = ref(0); // 定制框的高度
-let widgets = [];
+let widgets = ref([]);
 const minCols = 2; // 面板最小的列
 const minRows = 2; // 面板最小的行
 const MAX_X_NUMBER = 12; // 屏幕X轴分成12列
@@ -138,11 +139,11 @@ const DASHBOARD_WIDGET_TYPE = [
     components: 'eDSCompMyApply',
   },
 ];
-let selectedModuleType = ''; // 选中的功能模块类型
+let selectedModuleType = ref(''); // 选中的功能模块类型
 let activeIndex = 0;
+let ELMessage_DURATION = 3;
 
 // const editor = document.getElementById('editor');
-const onAddWidget = () => {};
 // 初始计算尺寸
 const initSize = () => {
   const designContainer = document.getElementById('designContainer');
@@ -158,7 +159,7 @@ const initSize = () => {
 const getInitWidgets = () => {
   if (homeDate) {
     homeDate.forEach((item) => {
-      widgets.push({
+      widgets.value.push({
         handleFlag: 'update',
         id: item.id,
         title: item.title,
@@ -180,7 +181,7 @@ const getInitWidgets = () => {
 };
 // 重新计算面板尺寸（页面尺寸调整时，例：F12）
 const refreshWidgetSize = () => {
-  widgets.forEach((item) => {
+  widgets.value.forEach((item) => {
     item.x = designWidth.value * ((1 / MAX_X_NUMBER) * item.xCols);
     item.y = designHeight.value * ((1 / MAX_Y_NUMBER) * item.yRows);
     item.w = designWidth.value * ((1 / MAX_X_NUMBER) * item.cols);
@@ -202,77 +203,85 @@ const onResize = (left: number, top: number, width: number, height: number) => {
 const onActivated = (index: number) => {
   activeIndex = index;
 };
-// const onTableRowClick = (row) => {
-//   activeIndex = widgets.findIndex((item) => item.type == row.type);
-// };
-// const onAddWidget = () => {
-//   if (selectedModuleType == '') {
-//     ElMessage({
-//       message: '请选择添加的功能模块',
-//       type: 'error',
-//       duration: ELMessage_DURATION,
-//     });
-//   } else {
-//     // 判断相同类型模块是否已经存在
-//     let index = widgets.findIndex(
-//       (item) => item.type == selectedModuleType && item.handleFlag != 'delete'
-//     );
-//     if (index != -1) {
-//       ElMessage({
-//         message: '该功能模块已经存在',
-//         type: 'error',
-//         duration: ELMessage_DURATION,
-//       });
-//     } else {
-//       let index = DASHBOARD_WIDGET_TYPE.findIndex(
-//         (item) => item.type == selectedModuleType
-//       );
-//       let selectedModule = DASHBOARD_WIDGET_TYPE[index] as any;
 
-//       widgets.push({
-//         handleFlag: 'add',
-//         title: selectedModule.title,
-//         remark: selectedModule.remark,
-//         xCols: 0,
-//         yRows: 0,
-//         cols: 2,
-//         rows: 2,
-//         x: 0,
-//         y: 0,
-//         h: gridHeight.value * 2,
-//         w: gridWidth.value * 2,
-//         z: 0,
-//         dashBoardID: dashboardInfo.id,
-//         type: selectedModule.type,
-//         typeID: selectedModule.typeID,
-//         minCols: minCols,
-//         minRows: minRows,
-//       });
-//       // 新增的自动获取焦点
-//       activeIndex = widgets.length - 1;
-//     }
-//   }
-// };
-// const onDeleteWidget = (widget) => {
-//   ElMessageBox.confirm('确定删除【' + widget.title + '】面板', '提示', {
-//     confirmButtonText: '确定',
-//     cancelButtonText: '取消',
-//     type: 'warning',
-//     dangerouslyUseHTMLString: true,
-//   })
-//     .then(() => {
-//       switch (widget.handleFlag) {
-//         case 'update':
-//           widget.handleFlag = 'delete';
-//           break;
-//         case 'add':
-//           let index = widgets.findIndex((item) => item.type == widget.type);
-//           widgets.splice(index, 1);
-//           break;
-//       }
-//     })
-//     .catch(() => {});
-// };
+const onTableRowClick = (row) => {
+  activeIndex = widgets.value.findIndex((item) => item.type == row.type);
+};
+//添加模块
+const onAddWidget = () => {
+  if (selectedModuleType.value == '') {
+    ElMessage({
+      message: '请选择添加的功能模块',
+      type: 'error',
+      duration: ELMessage_DURATION,
+    });
+  } else {
+    // 判断相同类型模块是否已经存在
+    let index = widgets.value.findIndex(
+      (item) =>
+        item.type == selectedModuleType.value && item.handleFlag != 'delete'
+    );
+    if (index != -1) {
+      ElMessage({
+        message: '该功能模块已经存在',
+        type: 'error',
+        duration: ELMessage_DURATION,
+      });
+    } else {
+      let index = DASHBOARD_WIDGET_TYPE.findIndex(
+        (item) => item.type == selectedModuleType.value
+      );
+      let selectedModule = DASHBOARD_WIDGET_TYPE[index];
+
+      widgets.value.push({
+        handleFlag: 'add',
+        title: selectedModule.title,
+        remark: selectedModule.remark,
+        xCols: 0,
+        yRows: 0,
+        cols: 2,
+        rows: 2,
+        x: 0,
+        y: 0,
+        h: gridHeight.value * 2,
+        w: gridWidth.value * 2,
+        z: 0,
+        // dashBoardID: dashboardInfo.id,
+        type: selectedModule.type,
+        typeID: selectedModule.typeID,
+        minCols: minCols,
+        minRows: minRows,
+      });
+      // 新增的自动获取焦点
+      activeIndex = widgets.value.length - 1;
+    }
+  }
+};
+//删除模块
+const onDeleteWidget = (widget) => {
+  ElMessageBox.confirm('确定删除【' + widget.title + '】面板', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+    dangerouslyUseHTMLString: true,
+  })
+    .then(() => {
+      switch (widget.handleFlag) {
+        case 'update': {
+          widget.handleFlag = 'delete';
+          break;
+        }
+        case 'add': {
+          let index = widgets.value.findIndex(
+            (item) => item.type == widget.type
+          );
+          widgets.value.splice(index, 1);
+          break;
+        }
+      }
+    })
+    .catch(() => {});
+};
 
 // 保存（外部页面调用）
 // const onSaveWidgets = () => {
@@ -343,6 +352,12 @@ const onActivated = (index: number) => {
 //   });
 // };
 
+// 表格里面的数据
+const designWidgets = computed(() => {
+  return widgets.value.filter((item) => item.handleFlag != 'delete');
+});
+
+// 处理resize后的显示
 const handleResize = () => {
   // 重新计算尺寸
   initSize();
