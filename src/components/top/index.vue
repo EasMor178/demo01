@@ -2,7 +2,7 @@
   <div class="top">
     <div class="content">
       <div class="left">
-        <p class="logoText">TEST</p>
+        <p class="logoText">这是一个测试页</p>
       </div>
       <div class="right">
         <p class="help">帮助中心</p>

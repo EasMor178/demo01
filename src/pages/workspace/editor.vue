@@ -88,8 +88,7 @@
 import VueDraggableResizable from 'vue-draggable-resizable/src/components/vue-draggable-resizable.vue';
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 import { Plus, Delete } from '@element-plus/icons-vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue';
+// import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue';
 import { useHomeStore } from '@/store/home.ts';
 const homeDate = useHomeStore().date;
 
