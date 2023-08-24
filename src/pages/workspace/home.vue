@@ -1,93 +1,25 @@
 <template>
   <main class="home" style="position: relative">
     <div
+      v-for="item in homeDate"
       :style="{
-        width: homeDate[0].cols * 8.3333 + '%',
-        height: homeDate[0].rows * 16.6666 + '%',
-        left: homeDate[0].x * 8.3333 + '%',
-        top: homeDate[0].y * 16.6666 + '%',
+        width: item.cols * 8.3333 + '%',
+        height: item.rows * 16.6666 + '%',
+        left: item.x * 8.3333 + '%',
+        top: item.y * 16.6666 + '%',
       }"
       style="position: absolute; padding: 10px 10px 0 10px"
     >
       <div class="card">
         <div class="head">
-          <h1>{{ homeDate[0].title }}</h1>
+          <h1>{{ item.title }}</h1>
         </div>
         <div class="body">
-          <span v-html="homeDate[0].content"></span>
+          <span v-html="item.content" v-if="item.typeID == 1"></span>
           <!-- <ProFile /> -->
-        </div>
-      </div>
-    </div>
-    <div
-      :style="{
-        width: homeDate[1].cols * 8.3333 + '%',
-        height: homeDate[1].rows * 16.6666 + '%',
-        left: homeDate[1].x * 8.3333 + '%',
-        top: homeDate[1].y * 16.6666 + '%',
-      }"
-      style="position: absolute; padding: 10px 10px 0 10px"
-    >
-      <div class="card">
-        <div class="head">
-          <h1>{{ homeDate[1].title }}</h1>
-        </div>
-        <div class="body">
-          <Manage />
-        </div>
-      </div>
-    </div>
-    <div
-      :style="{
-        width: homeDate[2].cols * 8.3333 + '%',
-        height: homeDate[2].rows * 16.6666 + '%',
-        left: homeDate[2].x * 8.3333 + '%',
-        top: homeDate[2].y * 16.6666 + '%',
-      }"
-      style="position: absolute; padding: 10px 10px 0 10px"
-    >
-      <div class="card">
-        <div class="head">
-          <h1>{{ homeDate[2].title }}</h1>
-        </div>
-        <div class="body">
-          <Statistics />
-        </div>
-      </div>
-    </div>
-    <div
-      :style="{
-        width: homeDate[3].cols * 8.3333 + '%',
-        height: homeDate[3].rows * 16.6666 + '%',
-        left: homeDate[3].x * 8.3333 + '%',
-        top: homeDate[3].y * 16.6666 + '%',
-      }"
-      style="position: absolute; padding: 10px 10px 0 10px"
-    >
-      <div class="card">
-        <div class="head">
-          <h1>{{ homeDate[3].title }}</h1>
-        </div>
-        <div class="body">
-          <ProFile />
-        </div>
-      </div>
-    </div>
-    <div
-      :style="{
-        width: homeDate[4].cols * 8.3333 + '%',
-        height: homeDate[4].rows * 16.6666 + '%',
-        left: homeDate[4].x * 8.3333 + '%',
-        top: homeDate[4].y * 16.6666 + '%',
-      }"
-      style="position: absolute; padding: 10px 10px 0 10px"
-    >
-      <div class="card">
-        <div class="head">
-          <h1>{{ homeDate[4].title }}</h1>
-        </div>
-        <div class="body">
-          <ProFile />
+          <Manage v-if="item.typeID == 2" />
+          <Statistics v-if="item.typeID == 3" />
+          <ProFile v-if="item.typeID == 4" />
         </div>
       </div>
     </div>

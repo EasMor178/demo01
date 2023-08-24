@@ -30,7 +30,7 @@
     </div>
     <div class="widget-settings">
       <div class="setting-header">
-        <span style="margin-right: 20px; z-index: 1"> 组件设置 </span>
+        <span> 组件设置 </span>
         <el-select
           v-model="selectedModuleType"
           style="width: 170px; margin-right: 5px"
@@ -90,8 +90,12 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 import { Plus, Delete } from '@element-plus/icons-vue';
 // import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue';
 import { useHomeStore } from '@/store/home.ts';
-const homeDate = useHomeStore().date;
+// import { emit } from 'process';
+const homeStore = useHomeStore();
+const homeDate = homeStore.date;
+const emit = defineEmits(['changeHome']);
 
+let homeDateLength = homeDate.length;
 let gridWidth = ref(0); //一格的宽度
 let gridHeight = ref(0); //一格的高度
 let designWidth = ref(0); // 定制框的宽度
@@ -188,16 +192,22 @@ const refreshWidgetSize = () => {
   });
 };
 // 拖拽面板
-const onDrag = (left: number, top: number) => {
-  homeDate[activeIndex].x = left / gridWidth.value;
-  homeDate[activeIndex].y = top / gridHeight.value;
+const onDrag = (x: number, y: number) => {
+  let widget = widgets.value[activeIndex];
+  widget.x = x;
+  widget.y = y;
+  widget.xCols = x / gridWidth.value;
+  widget.yRows = y / gridHeight.value;
 };
 // 放大缩小面板
-const onResize = (left: number, top: number, width: number, height: number) => {
-  homeDate[activeIndex].x = left / gridWidth.value;
-  homeDate[activeIndex].y = top / gridHeight.value;
-  homeDate[activeIndex].cols = width / gridWidth.value;
-  homeDate[activeIndex].rows = height / gridHeight.value;
+const onResize = (x: number, y: number, width: number, height: number) => {
+  let widget = widgets.value[activeIndex];
+  widget.x = x;
+  widget.y = y;
+  widget.w = width;
+  widget.h = height;
+  widget.cols = width / gridWidth.value;
+  widget.rows = height / gridHeight.value;
 };
 const onActivated = (index: number) => {
   activeIndex = index;
@@ -206,7 +216,7 @@ const onActivated = (index: number) => {
 const onTableRowClick = (row) => {
   activeIndex = widgets.value.findIndex((item) => item.type == row.type);
 };
-//添加模块
+// 添加模块
 const onAddWidget = () => {
   if (selectedModuleType.value == '') {
     ElMessage({
@@ -246,6 +256,7 @@ const onAddWidget = () => {
         w: gridWidth.value * 2,
         z: 0,
         // dashBoardID: dashboardInfo.id,
+        id: ++homeDateLength,
         type: selectedModule.type,
         typeID: selectedModule.typeID,
         minCols: minCols,
@@ -256,7 +267,7 @@ const onAddWidget = () => {
     }
   }
 };
-//删除模块
+// 删除模块
 const onDeleteWidget = (widget) => {
   ElMessageBox.confirm('确定删除【' + widget.title + '】面板', '提示', {
     confirmButtonText: '确定',
@@ -283,73 +294,60 @@ const onDeleteWidget = (widget) => {
 };
 
 // 保存（外部页面调用）
-// const onSaveWidgets = () => {
-//   widgets.forEach((item) => {
-//     // 逐个保存面板信息
-//     switch (item.handleFlag) {
-//       case 'add':
-//         // 新建保存
-//         let addWidgetInfo = {
-//           x: item.xCols,
-//           y: item.yRows,
-//           cols: item.cols,
-//           rows: item.rows,
-//           title: item.title,
-//           remark: item.remark,
-//           dashBoardID: item.dashBoardID,
-//           type: item.type,
-//           typeID: item.typeID,
-//           minCols: item.minCols,
-//           minRows: item.minRows,
-//         };
-//         let addParams = {
-//           id: item.dashBoardID,
-//           wid: item.id,
-//           data: addWidgetInfo,
-//         };
-//         storeDashboard()
-//           .createDashboardWidget(addParams)
-//           .then(
-//             () => {},
-//             () => {}
-//           );
-//         break;
-//       case 'update':
-//         // 修改保存
-//         let updateWidgetInfo = {
-//           x: item.xCols,
-//           y: item.yRows,
-//           cols: item.cols,
-//           rows: item.rows,
-//         };
-//         let updateParams = {
-//           id: item.dashBoardID,
-//           wid: item.id,
-//           data: updateWidgetInfo,
-//         };
-//         storeDashboard()
-//           .updateDashboardWidget(updateParams)
-//           .then(
-//             () => {},
-//             () => {}
-//           );
-//         break;
-//       case 'delete':
-//         // 删除保存
-//         let deleteParams = {
-//           id: item.dashBoardID,
-//           wid: item.id,
-//         };
-//         storeDashboard()
-//           .deleteDashboardWidget(deleteParams)
-//           .then(
-//             () => {},
-//             () => {}
-//           );
-//         break;
-//     }
-//   });
-// };
+const onSaveWidgets = () => {
+  widgets.value.forEach((item) => {
+    // 逐个保存面板信息
+    switch (item.handleFlag) {
+      case 'add':
+        // 新建保存
+        let addWidgetInfo = {
+          x: item.xCols,
+          y: item.yRows,
+          cols: item.cols,
+          rows: item.rows,
+          title: item.title,
+          remark: item.remark,
+          dashBoardID: item.dashBoardID,
+          type: item.type,
+          typeID: item.typeID,
+          minCols: item.minCols,
+          minRows: item.minRows,
+        };
+        let addParamsTitle = {
+          id: item.id,
+          data: addWidgetInfo,
+        };
+        homeStore.addParams(addParamsTitle);
+
+        break;
+      case 'update':
+        // 修改保存
+        let updateWidgetInfo = {
+          x: item.xCols,
+          y: item.yRows,
+          cols: item.cols,
+          rows: item.rows,
+        };
+        let updateParamsTitle = {
+          id: item.id,
+          data: updateWidgetInfo,
+        };
+        homeStore.updateParams(updateParamsTitle);
+
+        break;
+      case 'delete':
+        // 删除保存
+        let deleteParamsTitle = {
+          id: item.id,
+          wid: item.id,
+        };
+        homeStore.deleteParams(deleteParamsTitle);
+
+        break;
+    }
+  });
+  emit('changeHome');
+};
 
 // 表格里面的数据
 const designWidgets = computed(() => {
@@ -368,11 +366,17 @@ const handleResize = () => {
 
 onMounted(() => {
   initSize();
-  getInitWidgets();
+  nextTick(() => {
+    getInitWidgets();
+  });
   window.addEventListener('resize', handleResize);
 });
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
+});
+
+defineExpose({
+  onSaveWidgets,
 });
 </script>
 <style scoped lang="scss">
@@ -421,7 +425,13 @@ onBeforeUnmount(() => {
     grid-row: 2/21;
     // background: #999999;
     .setting-header {
+      display: flex;
+      align-items: center;
       height: 60px;
+      span {
+        margin-right: 20px;
+        white-space: nowrap;
+      }
     }
   }
 }

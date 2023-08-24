@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { defineStore } from 'pinia';
 
 export const useHomeStore = defineStore('home', {
@@ -100,6 +101,42 @@ export const useHomeStore = defineStore('home', {
       ],
     };
   },
-  actions: {},
+  actions: {
+    addParams(addParams) {
+      this.date.push({
+        id: addParams.id,
+        createdAt: '2023-02-03T09:42:35.422+08:00',
+        updatedAt: '2023-02-03T09:42:35.422+08:00',
+        dashBoardID: 1,
+        typeID: 5,
+        type: 'my-app',
+        title: addParams.data.title,
+        remark: '我的申请列表',
+        content: '',
+        cols: 6,
+        rows: 4,
+        minCols: 3,
+        minRows: 2,
+        x: 6,
+        y: 3,
+        default: true,
+      });
+    },
+    updateParams(updateParams) {
+      let a = this.date.findIndex((item) => item.id === updateParams.id);
+      this.date[a].x = updateParams.data.x;
+      this.date[a].y = updateParams.data.y;
+      this.date[a].cols = updateParams.data.cols;
+      this.date[a].rows = updateParams.data.rows;
+    },
+    deleteParams(deleteParams) {
+      this.date.splice(
+        this.date.findIndex((item) => item.id === deleteParams.id),
+        1
+      );
+
+      console.log(this.date);
+    },
+  },
   getters: {},
 });

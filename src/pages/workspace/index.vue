@@ -12,18 +12,18 @@
       </el-button>
     </div>
     <div class="rightSetting" v-if="!isHome">
-      <el-button @click="onSaveWidgets" type="primary">
+      <el-button @click="editerBack.onSaveWidgets()" type="primary">
         <el-icon :size="20" style="margin-right: 5px"> <Check /> </el-icon>
         保存
       </el-button>
-      <el-button @click="changeHome" type="primary">
+      <el-button @click="changeHome()" type="primary">
         <el-icon :size="20" style="margin-right: 5px"><Close /></el-icon>
         取消
       </el-button>
     </div>
   </nav>
   <main>
-    <editor v-if="!isHome"></editor>
+    <editor ref="editerBack" v-if="!isHome" @changeHome="changeHome"></editor>
     <home v-if="isHome"></home>
   </main>
 </template>
@@ -35,31 +35,7 @@ let isHome = ref(true);
 const changeHome = () => {
   isHome.value = !isHome.value;
 };
-
-const onSaveWidgets = () => {
-  ElMessageBox.confirm(
-    '确定保存修改?',
-    // 'Warning',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      // type: 'warning',
-    }
-  )
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: '修改成功！！！',
-      });
-      changeHome();
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '取消修改！！！',
-      });
-    });
-};
+const editerBack = ref();
 </script>
 <style scoped lang="scss">
 nav {
