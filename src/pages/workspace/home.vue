@@ -3,10 +3,10 @@
     <div
       v-for="item in homeDate"
       :style="{
-        width: item.cols * 8.3333 + '%',
-        height: item.rows * 16.6666 + '%',
-        left: item.x * 8.3333 + '%',
-        top: item.y * 16.6666 + '%',
+        width: item.cols * gridWidth + '%',
+        height: item.rows * gridHeight + '%',
+        left: item.x * gridWidth + '%',
+        top: item.y * gridHeight + '%',
       }"
       style="position: absolute; padding: 10px 10px 0 10px"
     >
@@ -30,8 +30,10 @@ import ProFile from './profile/index.vue';
 import Manage from './manage/index.vue';
 import Statistics from './statistics/index.vue';
 import { useHomeStore } from '@/store/home';
-
-const homeDate = useHomeStore().date;
+const homeStore = useHomeStore();
+const homeDate = homeStore.date;
+const gridWidth = 100 / homeStore.MAX_X_NUMBER;
+const gridHeight = 100 / homeStore.MAX_Y_NUMBER;
 </script>
 <style scoped lang="scss">
 .home {

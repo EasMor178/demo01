@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { defineStore } from 'pinia';
 
 export const useHomeStore = defineStore('home', {
@@ -99,6 +98,45 @@ export const useHomeStore = defineStore('home', {
           default: true,
         },
       ],
+      DASHBOARD_WIDGET_TYPE: [
+        {
+          typeID: 1,
+          type: 'intro',
+          title: '简介',
+          remark: '本系统简介',
+          components: 'eDSCompCustomize',
+        },
+        {
+          typeID: 2,
+          type: 'mgr',
+          title: '管理',
+          remark: '系统管理功能入口',
+          components: 'eDSCompCommand',
+        },
+        {
+          typeID: 3,
+          type: 'terminal-stat',
+          title: '终端统计',
+          remark: '终端用户数、许可使用情况统计',
+          components: 'eDSCompTerminalStats',
+        },
+        {
+          typeID: 4,
+          type: 'my-task',
+          title: '我的任务',
+          remark: '我的待审批任务列表',
+          components: 'eDSCompMyTask',
+        },
+        {
+          typeID: 5,
+          type: 'my-app',
+          title: '我的申请',
+          remark: '我的申请列表',
+          components: 'eDSCompMyApply',
+        },
+      ],
+      MAX_X_NUMBER: 12, // 屏幕X轴分成12列
+      MAX_Y_NUMBER: 6, // 屏幕Y轴分成6行
     };
   },
   actions: {
@@ -108,17 +146,17 @@ export const useHomeStore = defineStore('home', {
         createdAt: '2023-02-03T09:42:35.422+08:00',
         updatedAt: '2023-02-03T09:42:35.422+08:00',
         dashBoardID: 1,
-        typeID: 5,
-        type: 'my-app',
+        typeID: addParams.data.typeID,
+        type: addParams.data.type,
         title: addParams.data.title,
-        remark: '我的申请列表',
+        remark: addParams.data.remark,
         content: '',
-        cols: 6,
-        rows: 4,
-        minCols: 3,
-        minRows: 2,
-        x: 6,
-        y: 3,
+        cols: addParams.data.cols,
+        rows: addParams.data.rows,
+        minCols: addParams.data.minCols,
+        minRows: addParams.data.minRows,
+        x: addParams.data.x,
+        y: addParams.data.y,
         default: true,
       });
     },
@@ -134,8 +172,6 @@ export const useHomeStore = defineStore('home', {
         this.date.findIndex((item) => item.id === deleteParams.id),
         1
       );
-
-      console.log(this.date);
     },
   },
   getters: {},

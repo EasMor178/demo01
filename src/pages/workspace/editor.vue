@@ -7,10 +7,12 @@
         'background-size': `${gridWidth}px ${gridHeight}px`,
       }"
     >
-      <template v-for="(widget, index) in widgets" :key="widget.index">
+      <template v-for="(widget, index) in widgets">
         <VueDraggableResizable
           v-if="widget.handleFlag != 'delete'"
           class="widget-container"
+          :style="{ 'z-index': activeIndex == index ? 1 : 0 }"
+          :active="activeIndex == index"
           :parent="false"
           :grid="[gridWidth, gridHeight]"
           :x="widget.x"
@@ -88,65 +90,26 @@
 import VueDraggableResizable from 'vue-draggable-resizable/src/components/vue-draggable-resizable.vue';
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
 import { Plus, Delete } from '@element-plus/icons-vue';
-// import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue';
 import { useHomeStore } from '@/store/home.ts';
-// import { emit } from 'process';
 const homeStore = useHomeStore();
 const homeDate = homeStore.date;
+const MAX_X_NUMBER = homeStore.MAX_X_NUMBER;
+const MAX_Y_NUMBER = homeStore.MAX_Y_NUMBER;
+const DASHBOARD_WIDGET_TYPE = homeStore.DASHBOARD_WIDGET_TYPE;
+
 const emit = defineEmits(['changeHome']);
 
-let homeDateLength = homeDate.length;
+let widgets = ref([]);
 let gridWidth = ref(0); //一格的宽度
 let gridHeight = ref(0); //一格的高度
 let designWidth = ref(0); // 定制框的宽度
 let designHeight = ref(0); // 定制框的高度
-let widgets = ref([]);
 const minCols = 2; // 面板最小的列
 const minRows = 2; // 面板最小的行
-const MAX_X_NUMBER = 12; // 屏幕X轴分成12列
-const MAX_Y_NUMBER = 6; // 屏幕Y轴分成6行
-const DASHBOARD_WIDGET_TYPE = [
-  {
-    typeID: 1,
-    type: 'intro',
-    title: '简介',
-    remark: '本系统简介',
-    components: 'eDSCompCustomize',
-  },
-  {
-    typeID: 2,
-    type: 'mgr',
-    title: '管理',
-    remark: '系统管理功能入口',
-    components: 'eDSCompCommand',
-  },
-  {
-    typeID: 3,
-    type: 'terminal-stat',
-    title: '终端统计',
-    remark: '终端用户数、许可使用情况统计',
-    components: 'eDSCompTerminalStats',
-  },
-  {
-    typeID: 4,
-    type: 'my-task',
-    title: '我的任务',
-    remark: '我的待审批任务列表',
-    components: 'eDSCompMyTask',
-  },
-  {
-    typeID: 5,
-    type: 'my-app',
-    title: '我的申请',
-    remark: '我的申请列表',
-    components: 'eDSCompMyApply',
-  },
-];
 let selectedModuleType = ref(''); // 选中的功能模块类型
 let activeIndex = 0;
 let ELMessage_DURATION = 3;
 
-// const editor = document.getElementById('editor');
 // 初始计算尺寸
 const initSize = () => {
   const designContainer = document.getElementById('designContainer');
@@ -241,7 +204,7 @@ const onAddWidget = () => {
         (item) => item.type == selectedModuleType.value
       );
       let selectedModule = DASHBOARD_WIDGET_TYPE[index];
-
+      let maxID = Math.max(...homeDate.map((x) => x.id));
       widgets.value.push({
         handleFlag: 'add',
         title: selectedModule.title,
@@ -256,7 +219,7 @@ const onAddWidget = () => {
         w: gridWidth.value * 2,
         z: 0,
         // dashBoardID: dashboardInfo.id,
-        id: ++homeDateLength,
+        id: ++maxID,
         type: selectedModule.type,
         typeID: selectedModule.typeID,
         minCols: minCols,
@@ -363,7 +326,6 @@ const handleResize = () => {
     refreshWidgetSize();
   });
 };
-
 onMounted(() => {
   initSize();
   nextTick(() => {
