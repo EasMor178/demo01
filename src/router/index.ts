@@ -9,6 +9,11 @@ export default createRouter({
       children: [],
     },
     {
+      path: '/automate',
+      component: () => import('@/pages/automate/index.vue'),
+      children: [],
+    },
+    {
       path: '/other01',
       component: () => import('@/pages/other01/index.vue'),
     },

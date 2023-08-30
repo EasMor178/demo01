@@ -14,23 +14,23 @@
       </div>
     </div>
     <div class="item">
-      <el-menu-item index="1" @click="goWorkspace">
+      <el-menu-item index="1" @click="toPage('/workspace')">
         <el-icon>
           <SuitcaseLine />
         </el-icon>
         <template #title>工作台</template>
       </el-menu-item>
-      <el-menu-item index="2" @click="goWorkspace">
+      <el-menu-item index="2" @click="toPage('/automate')">
         <el-icon><icon-menu /></el-icon>
-        <template #title>管理</template>
+        <template #title>终端管理</template>
       </el-menu-item>
-      <el-menu-item index="3" @click="goOther01">
+      <el-menu-item index="3" @click="toPage('/other01')">
         <el-icon>
           <document />
         </el-icon>
         <template #title>策略管理</template>
       </el-menu-item>
-      <el-menu-item index="4" @click="goOther02">
+      <el-menu-item index="4" @click="toPage('/other02')">
         <el-icon>
           <setting />
         </el-icon>
@@ -82,17 +82,12 @@ const disCollapse = () => {
   isCollapse.value = !isCollapse.value;
 };
 
+//路由跳转
 import { useRouter } from 'vue-router';
-let $router = useRouter();
-
-const goWorkspace = () => {
-  $router.push({ path: '/workspace' });
-};
-const goOther01 = () => {
-  $router.push({ path: '/other01' });
-};
-const goOther02 = () => {
-  $router.push({ path: '/other02' });
+const router = useRouter();
+const toPage = (url: string) => {
+  router.replace({ path: url });
+  // router.push({ path: url }); //历史记录
 };
 </script>
 
