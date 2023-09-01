@@ -1,32 +1,15 @@
 <template>
-  <el-menu default-active="2" class="el-menu-vertical-demo">
-    <span style="font-size: 12px; color: #888888">产品</span>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <span>全部产品</span>
-    </el-menu-item>
-    <el-menu-item index="3">
-      <el-icon>
-        <document />
-      </el-icon>
-      <span>组织产品</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon>
-        <setting />
-      </el-icon>
-      <span>团队产品</span>
-    </el-menu-item>
-  </el-menu>
+  <vue-draggable-resizable
+    class-name-handle="my-handle-class"
+    style="cursor: move"
+  >
+    <p>
+      You can provide a default class name for handle using the
+      <b>class-name-handle</b> prop.
+    </p>
+  </vue-draggable-resizable>
 </template>
 
 <script lang="ts" setup>
-import { Document, Menu as IconMenu, Setting } from '@element-plus/icons-vue';
+import VueDraggableResizable from 'vue-draggable-resizable/src/components/vue-draggable-resizable.vue';
 </script>
-<style lang="scss" scoped>
-.el-menu {
-  width: 280px;
-  height: 100%;
-  padding: 30px 20px;
-}
-</style>

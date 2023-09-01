@@ -1,9 +1,11 @@
 <template>
-  <div class="editor" id="editer">
+  <div class="editor" id="editor">
     <div
       id="designContainer"
       class="design-container"
       :style="{
+        width: `${designWidth}px`,
+        height: `${designHeight}px`,
         'background-size': `${gridWidth}px ${gridHeight}px`,
       }"
     >
@@ -11,6 +13,7 @@
         <VueDraggableResizable
           v-if="widget.handleFlag != 'delete'"
           class="widget-container"
+          class-name-handle="my-handle-class"
           :style="{ 'z-index': activeIndex == index ? 1 : 0 }"
           :active="activeIndex == index"
           :parent="false"
@@ -112,12 +115,14 @@ let ELMessage_DURATION = 3;
 
 // 初始计算尺寸
 const initSize = () => {
-  const designContainer = document.getElementById('designContainer');
-  designWidth.value = designContainer.clientWidth;
-  designHeight.value = designContainer.clientHeight;
-  gridWidth.value = parseInt((designWidth.value / MAX_X_NUMBER).toFixed(0));
-  gridHeight.value = parseInt((designHeight.value / MAX_Y_NUMBER).toFixed(0));
+  const editor = document.getElementById('editor');
+  const width = editor.clientWidth * 0.65;
+  const height = editor.clientHeight * 0.8;
+
   // 修正为整数
+  gridWidth.value = parseInt((width / MAX_X_NUMBER).toFixed(0));
+  gridHeight.value = parseInt((height / MAX_Y_NUMBER).toFixed(0));
+
   designWidth.value = gridWidth.value * MAX_X_NUMBER;
   designHeight.value = gridHeight.value * MAX_Y_NUMBER;
 };
@@ -341,7 +346,7 @@ defineExpose({
   onSaveWidgets,
 });
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 .editor {
   width: 100%;
   height: calc(100vh - 100px);
@@ -351,13 +356,9 @@ defineExpose({
   grid-template-rows: repeat(20, 5%);
 
   .design-container {
-    overflow-y: hidden;
     max-height: 2000px;
-
     grid-column: 1;
     grid-row: 2/21;
-    width: 80%;
-    height: 80%;
     justify-self: center;
     border: 1px solid #808080;
     display: block;
@@ -373,6 +374,8 @@ defineExpose({
       font-weight: bold;
       font-family: YouYuan;
       .widget-content {
+        padding: 14px;
+        cursor: move;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -396,5 +399,79 @@ defineExpose({
       }
     }
   }
+}
+.my-handle-class {
+  position: absolute;
+  -webkit-transition: all 300ms linear;
+  -ms-transition: all 300ms linear;
+  transition: all 300ms linear;
+}
+
+.my-handle-class-tl {
+  height: 14px;
+  width: 14px;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  cursor: nw-resize;
+}
+
+.my-handle-class-tm {
+  height: 14px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  cursor: n-resize;
+}
+
+.my-handle-class-tr {
+  height: 14px;
+  width: 14px;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  cursor: ne-resize;
+}
+
+.my-handle-class-ml {
+  height: 100%;
+  width: 14px;
+  top: 0;
+  left: 0;
+  cursor: w-resize;
+}
+
+.my-handle-class-mr {
+  height: 100%;
+  width: 14px;
+  top: 0;
+  right: 0;
+  cursor: e-resize;
+}
+
+.my-handle-class-bl {
+  height: 14px;
+  width: 14px;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  cursor: sw-resize;
+}
+
+.my-handle-class-bm {
+  height: 14px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  cursor: s-resize;
+}
+
+.my-handle-class-br {
+  height: 14px;
+  width: 14px;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  cursor: se-resize;
 }
 </style>

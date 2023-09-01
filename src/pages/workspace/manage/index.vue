@@ -17,6 +17,7 @@ import { Menu as IconMenu } from '@element-plus/icons-vue';
   display: flex;
   flex-wrap: wrap;
   // align-items: center;
+  overflow-y: auto;
   justify-content: center;
 
   .item {
@@ -45,5 +46,8 @@ import { Menu as IconMenu } from '@element-plus/icons-vue';
       margin-top: 5px;
     }
   }
+}
+.manage::-webkit-scrollbar {
+  display: none;
 }
 </style>
