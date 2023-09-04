@@ -8,7 +8,7 @@
         left: item.x * gridWidth + '%',
         top: item.y * gridHeight + '%',
       }"
-      style="position: absolute; padding: 10px 10px 0 10px"
+      style="position: absolute; padding: 5px 5px"
     >
       <div class="card">
         <div class="head">

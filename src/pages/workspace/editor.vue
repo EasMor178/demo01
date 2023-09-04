@@ -35,7 +35,7 @@
     </div>
     <div class="widget-settings">
       <div class="setting-header">
-        <span> 组件设置 </span>
+        <span style="margin-right: 5px; white-space: nowrap"> 组件设置： </span>
         <el-select
           v-model="selectedModuleType"
           style="width: 170px; margin-right: 5px"
@@ -117,7 +117,7 @@ let ELMessage_DURATION = 3;
 const initSize = () => {
   const editor = document.getElementById('editor');
   const width = editor.clientWidth * 0.65;
-  const height = editor.clientHeight * 0.8;
+  const height = editor.clientHeight * 0.7;
 
   // 修正为整数
   gridWidth.value = parseInt((width / MAX_X_NUMBER).toFixed(0));
@@ -358,7 +358,7 @@ defineExpose({
   .design-container {
     max-height: 2000px;
     grid-column: 1;
-    grid-row: 2/21;
+    grid-row: 3/21;
     justify-self: center;
     border: 1px solid #808080;
     display: block;
@@ -387,16 +387,12 @@ defineExpose({
     flex-direction: column;
 
     grid-column: 2;
-    grid-row: 2/21;
+    grid-row: 3/21;
     // background: #999999;
     .setting-header {
       display: flex;
       align-items: center;
       height: 60px;
-      span {
-        margin-right: 20px;
-        white-space: nowrap;
-      }
     }
   }
 }

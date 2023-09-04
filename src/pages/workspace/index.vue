@@ -12,7 +12,7 @@
       </el-button>
     </div>
     <div class="rightSetting" v-if="!isHome">
-      <el-button @click="editerBack.onSaveWidgets()" type="primary">
+      <el-button @click="editorBack.onSaveWidgets()" type="primary">
         <el-icon :size="20" style="margin-right: 5px"> <Check /> </el-icon>
         保存
       </el-button>
@@ -23,7 +23,7 @@
     </div>
   </nav>
   <main>
-    <editor ref="editerBack" v-if="!isHome" @changeHome="changeHome"></editor>
+    <editor ref="editorBack" v-if="!isHome" @changeHome="changeHome"></editor>
     <home v-if="isHome"></home>
   </main>
 </template>
@@ -35,7 +35,7 @@ let isHome = ref(true);
 const changeHome = () => {
   isHome.value = !isHome.value;
 };
-const editerBack = ref();
+const editorBack = ref();
 </script>
 <style scoped lang="scss">
 nav {
@@ -47,6 +47,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  flex-wrap: nowrap;
   .el-button {
     margin-left: 20px;
   }
