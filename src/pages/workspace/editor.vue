@@ -102,7 +102,7 @@ const DASHBOARD_WIDGET_TYPE = homeStore.DASHBOARD_WIDGET_TYPE;
 
 const emit = defineEmits(['changeHome']);
 
-let widgets = ref([]);
+let widgets = reactive([]); // 格子数组
 let gridWidth = ref(0); //一格的宽度
 let gridHeight = ref(0); //一格的高度
 let designWidth = ref(0); // 定制框的宽度
@@ -130,7 +130,7 @@ const initSize = () => {
 const getInitWidgets = () => {
   if (homeDate) {
     homeDate.forEach((item) => {
-      widgets.value.push({
+      widgets.push({
         handleFlag: 'update',
         id: item.id,
         title: item.title,
@@ -152,16 +152,26 @@ const getInitWidgets = () => {
 };
 // 重新计算面板尺寸（页面尺寸调整时，例：F12）
 const refreshWidgetSize = () => {
-  widgets.value.forEach((item) => {
+  widgets.forEach((item) => {
     item.x = designWidth.value * ((1 / MAX_X_NUMBER) * item.xCols);
     item.y = designHeight.value * ((1 / MAX_Y_NUMBER) * item.yRows);
     item.w = designWidth.value * ((1 / MAX_X_NUMBER) * item.cols);
     item.h = designHeight.value * ((1 / MAX_Y_NUMBER) * item.rows);
   });
 };
+
 // 拖拽面板
 const onDrag = (x: number, y: number) => {
-  let widget = widgets.value[activeIndex];
+  let widget = widgets[activeIndex];
+  // 互换位置
+  for (let n = 0; n < widgets.length; n++) {
+    if (widgets[n].x === x && widgets[n].y === y) {
+      widgets[n].x = activeWidget.x;
+      widgets[n].y = activeWidget.y;
+      widgets[n].xCols = activeWidget.xCols;
+      widgets[n].yRows = activeWidget.yRows;
+    }
+  }
   widget.x = x;
   widget.y = y;
   widget.xCols = x / gridWidth.value;
@@ -169,20 +179,101 @@ const onDrag = (x: number, y: number) => {
 };
 // 放大缩小面板
 const onResize = (x: number, y: number, width: number, height: number) => {
-  let widget = widgets.value[activeIndex];
+  let widget = widgets[activeIndex];
   widget.x = x;
   widget.y = y;
   widget.w = width;
   widget.h = height;
+  widget.xCols = x / gridWidth.value;
+  widget.yRows = y / gridHeight.value;
   widget.cols = width / gridWidth.value;
   widget.rows = height / gridHeight.value;
+
+  // 将其他格子向下推
+  const pushDown = (a: number) => {
+    for (let n = 0; n < widgets.length; n++) {
+      if (
+        widgets[n].yRows === widgets[a].yRows + widgets[a].rows - 1 &&
+        !(
+          widgets[n].xCols > widgets[a].xCols + widgets[a].cols - 1 ||
+          widgets[n].cols + widgets[n].xCols - 1 < widgets[a].xCols
+        )
+      ) {
+        widgets[n].y += gridHeight.value;
+        widgets[n].yRows += 1;
+        pushDown(n);
+      }
+    }
+  };
+  // 将其他格子向上推
+  const pushUp = (a: number) => {
+    for (let n = 0; n < widgets.length; n++) {
+      if (
+        widgets[n].yRows + widgets[n].rows - 1 === widgets[a].yRows &&
+        !(
+          widgets[n].xCols > widgets[a].xCols + widgets[a].cols - 1 ||
+          widgets[n].cols + widgets[n].xCols - 1 < widgets[a].xCols
+        )
+      ) {
+        widgets[n].y -= gridHeight.value;
+        widgets[n].yRows -= 1;
+        pushUp(n);
+      }
+    }
+  };
+  // 将其他格子向左推
+  const pushLeft = (a: number) => {
+    for (let n = 0; n < widgets.length; n++) {
+      if (
+        widgets[n].xCols + widgets[n].cols - 1 === widgets[a].xCols &&
+        !(
+          widgets[n].yRows > widgets[a].yRows + widgets[a].rows - 1 ||
+          widgets[n].yRows + widgets[n].rows - 1 < widgets[a].yRows
+        )
+      ) {
+        widgets[n].x -= gridWidth.value;
+        widgets[n].xCols -= 1;
+        pushLeft(n);
+      }
+    }
+  };
+  // 将其他格子向右推
+  const pushRight = (a: number) => {
+    for (let n = 0; n < widgets.length; n++) {
+      if (
+        widgets[n].xCols === widgets[a].xCols + widgets[a].cols - 1 &&
+        !(
+          widgets[n].yRows > widgets[a].yRows + widgets[a].rows - 1 ||
+          widgets[n].yRows + widgets[n].rows - 1 < widgets[a].yRows
+        )
+      ) {
+        widgets[n].x += gridWidth.value;
+        widgets[n].xCols += 1;
+        pushRight(n);
+      }
+    }
+  };
+  pushDown(activeIndex);
+  pushUp(activeIndex);
+  pushLeft(activeIndex);
+  pushRight(activeIndex);
+};
+// 激活某个格子的控制
+const activeWidget = {
+  x: 0,
+  y: 0,
+  xCols: 0,
+  yRows: 0,
 };
 const onActivated = (index: number) => {
   activeIndex = index;
+  activeWidget.x = widgets[index].x;
+  activeWidget.y = widgets[index].y;
+  activeWidget.xCols = widgets[index].xCols;
+  activeWidget.yRows = widgets[index].yRows;
 };
-
 const onTableRowClick = (row) => {
-  activeIndex = widgets.value.findIndex((item) => item.type == row.type);
+  activeIndex = widgets.findIndex((item) => item.type == row.type);
 };
 // 添加模块
 const onAddWidget = () => {
@@ -194,7 +285,7 @@ const onAddWidget = () => {
     });
   } else {
     // 判断相同类型模块是否已经存在
-    let index = widgets.value.findIndex(
+    let index = widgets.findIndex(
       (item) =>
         item.type == selectedModuleType.value && item.handleFlag != 'delete'
     );
@@ -210,7 +301,7 @@ const onAddWidget = () => {
       );
       let selectedModule = DASHBOARD_WIDGET_TYPE[index];
       let maxID = Math.max(...homeDate.map((x) => x.id));
-      widgets.value.push({
+      widgets.push({
         handleFlag: 'add',
         title: selectedModule.title,
         remark: selectedModule.remark,
@@ -231,7 +322,7 @@ const onAddWidget = () => {
         minRows: minRows,
       });
       // 新增的自动获取焦点
-      activeIndex = widgets.value.length - 1;
+      activeIndex = widgets.length - 1;
     }
   }
 };
@@ -250,10 +341,8 @@ const onDeleteWidget = (widget) => {
           break;
         }
         case 'add': {
-          let index = widgets.value.findIndex(
-            (item) => item.type == widget.type
-          );
-          widgets.value.splice(index, 1);
+          let index = widgets.findIndex((item) => item.type == widget.type);
+          widgets.splice(index, 1);
           break;
         }
       }
@@ -263,7 +352,7 @@ const onDeleteWidget = (widget) => {
 
 // 保存（外部页面调用）
 const onSaveWidgets = () => {
-  widgets.value.forEach((item) => {
+  widgets.forEach((item) => {
     // 逐个保存面板信息
     switch (item.handleFlag) {
       case 'add':
@@ -319,7 +408,7 @@ const onSaveWidgets = () => {
 
 // 表格里面的数据
 const designWidgets = computed(() => {
-  return widgets.value.filter((item) => item.handleFlag != 'delete');
+  return widgets.filter((item) => item.handleFlag != 'delete');
 });
 
 // 处理resize后的显示

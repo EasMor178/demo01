@@ -6,7 +6,7 @@
         <el-icon :size="20" style="margin-right: 5px"> <Edit /> </el-icon>
         编辑
       </el-button>
-      <el-button type="primary">
+      <el-button @click="reload" type="primary">
         <el-icon :size="20" style="margin-right: 5px"><MagicStick /></el-icon
         >刷新
       </el-button>
@@ -16,7 +16,7 @@
         <el-icon :size="20" style="margin-right: 5px"> <Check /> </el-icon>
         保存
       </el-button>
-      <el-button @click="changeHome()" type="primary">
+      <el-button @click="reload" type="primary">
         <el-icon :size="20" style="margin-right: 5px"><Close /></el-icon>
         取消
       </el-button>
@@ -34,6 +34,9 @@ import home from './home.vue';
 let isHome = ref(true);
 const changeHome = () => {
   isHome.value = !isHome.value;
+};
+const reload = () => {
+  location.reload();
 };
 const editorBack = ref();
 </script>
