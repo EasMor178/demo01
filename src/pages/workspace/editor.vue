@@ -28,6 +28,7 @@
           @dragging="onDrag"
           @resizing="onResize"
           @activated="onActivated(index)"
+          @deactivated="onDeactivated"
         >
           <div class="widget-content">{{ widget.title }}</div>
         </VueDraggableResizable>
@@ -102,16 +103,16 @@ const DASHBOARD_WIDGET_TYPE = homeStore.DASHBOARD_WIDGET_TYPE;
 
 const emit = defineEmits(['changeHome']);
 
-let widgets = reactive([]); // 格子数组
-let gridWidth = ref(0); //一格的宽度
-let gridHeight = ref(0); //一格的高度
-let designWidth = ref(0); // 定制框的宽度
-let designHeight = ref(0); // 定制框的高度
+const widgets = reactive([]); // 格子数组
+const gridWidth = ref(0); //一格的宽度
+const gridHeight = ref(0); //一格的高度
+const designWidth = ref(0); // 定制框的宽度
+const designHeight = ref(0); // 定制框的高度
 const minCols = 2; // 面板最小的列
 const minRows = 2; // 面板最小的行
-let selectedModuleType = ref(''); // 选中的功能模块类型
+const selectedModuleType = ref(''); // 选中的功能模块类型
+const ELMessage_DURATION = 3;
 let activeIndex = 0;
-let ELMessage_DURATION = 3;
 
 // 初始计算尺寸
 const initSize = () => {
@@ -160,26 +161,48 @@ const refreshWidgetSize = () => {
   });
 };
 
+// 激活某个格子的控制
+const activeWidget = {
+  x: 0,
+  y: 0,
+};
+const onActivated = (index: number) => {
+  activeIndex = index;
+  activeWidget.x = widgets[index].x;
+  activeWidget.y = widgets[index].y;
+};
+// 停用某个模块
+const onDeactivated = () => {
+  const widget = widgets[activeIndex];
+  widget.x = activeWidget.x;
+  widget.y = activeWidget.y;
+  widget.xCols = activeWidget.x / gridWidth.value;
+  widget.yRows = activeWidget.y / gridHeight.value;
+};
+
 // 拖拽面板
 const onDrag = (x: number, y: number) => {
-  let widget = widgets[activeIndex];
+  const widget = widgets[activeIndex];
   // 互换位置
   for (let n = 0; n < widgets.length; n++) {
-    if (widgets[n].x === x && widgets[n].y === y) {
-      widgets[n].x = activeWidget.x;
-      widgets[n].y = activeWidget.y;
-      widgets[n].xCols = activeWidget.xCols;
-      widgets[n].yRows = activeWidget.yRows;
+    if (
+      widgets[n].x === x &&
+      widgets[n].y === y &&
+      widgets[n].w === widget.w &&
+      widgets[n].h === widget.h
+    ) {
+      [widgets[n].x, widget.x] = [widget.x, widgets[n].x];
+      [widgets[n].y, widget.y] = [widget.y, widgets[n].y];
+      [widgets[n].xCols, widget.xCols] = [widget.xCols, widgets[n].xCols];
+      [widgets[n].yRows, widget.yRows] = [widget.yRows, widgets[n].yRows];
     }
   }
-  widget.x = x;
-  widget.y = y;
-  widget.xCols = x / gridWidth.value;
-  widget.yRows = y / gridHeight.value;
+  activeWidget.x = x;
+  activeWidget.y = y;
 };
 // 放大缩小面板
 const onResize = (x: number, y: number, width: number, height: number) => {
-  let widget = widgets[activeIndex];
+  const widget = widgets[activeIndex];
   widget.x = x;
   widget.y = y;
   widget.w = width;
@@ -258,23 +281,12 @@ const onResize = (x: number, y: number, width: number, height: number) => {
   pushLeft(activeIndex);
   pushRight(activeIndex);
 };
-// 激活某个格子的控制
-const activeWidget = {
-  x: 0,
-  y: 0,
-  xCols: 0,
-  yRows: 0,
-};
-const onActivated = (index: number) => {
-  activeIndex = index;
-  activeWidget.x = widgets[index].x;
-  activeWidget.y = widgets[index].y;
-  activeWidget.xCols = widgets[index].xCols;
-  activeWidget.yRows = widgets[index].yRows;
-};
+
+// 选择某个格子
 const onTableRowClick = (row) => {
   activeIndex = widgets.findIndex((item) => item.type == row.type);
 };
+
 // 添加模块
 const onAddWidget = () => {
   if (selectedModuleType.value == '') {
@@ -285,7 +297,7 @@ const onAddWidget = () => {
     });
   } else {
     // 判断相同类型模块是否已经存在
-    let index = widgets.findIndex(
+    const index = widgets.findIndex(
       (item) =>
         item.type == selectedModuleType.value && item.handleFlag != 'delete'
     );
@@ -296,10 +308,10 @@ const onAddWidget = () => {
         duration: ELMessage_DURATION,
       });
     } else {
-      let index = DASHBOARD_WIDGET_TYPE.findIndex(
+      const index = DASHBOARD_WIDGET_TYPE.findIndex(
         (item) => item.type == selectedModuleType.value
       );
-      let selectedModule = DASHBOARD_WIDGET_TYPE[index];
+      const selectedModule = DASHBOARD_WIDGET_TYPE[index];
       let maxID = Math.max(...homeDate.map((x) => x.id));
       widgets.push({
         handleFlag: 'add',
@@ -341,7 +353,7 @@ const onDeleteWidget = (widget) => {
           break;
         }
         case 'add': {
-          let index = widgets.findIndex((item) => item.type == widget.type);
+          const index = widgets.findIndex((item) => item.type == widget.type);
           widgets.splice(index, 1);
           break;
         }
@@ -357,7 +369,7 @@ const onSaveWidgets = () => {
     switch (item.handleFlag) {
       case 'add':
         // 新建保存
-        let addWidgetInfo = {
+        const addWidgetInfo = {
           x: item.xCols,
           y: item.yRows,
           cols: item.cols,
@@ -370,7 +382,7 @@ const onSaveWidgets = () => {
           minCols: item.minCols,
           minRows: item.minRows,
         };
-        let addParamsTitle = {
+        const addParamsTitle = {
           id: item.id,
           data: addWidgetInfo,
         };
@@ -379,13 +391,13 @@ const onSaveWidgets = () => {
         break;
       case 'update':
         // 修改保存
-        let updateWidgetInfo = {
+        const updateWidgetInfo = {
           x: item.xCols,
           y: item.yRows,
           cols: item.cols,
           rows: item.rows,
         };
-        let updateParamsTitle = {
+        const updateParamsTitle = {
           id: item.id,
           data: updateWidgetInfo,
         };
@@ -394,7 +406,7 @@ const onSaveWidgets = () => {
         break;
       case 'delete':
         // 删除保存
-        let deleteParamsTitle = {
+        const deleteParamsTitle = {
           id: item.id,
           wid: item.id,
         };
@@ -420,6 +432,7 @@ const handleResize = () => {
     refreshWidgetSize();
   });
 };
+
 onMounted(() => {
   initSize();
   nextTick(() => {
