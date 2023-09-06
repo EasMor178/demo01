@@ -14,8 +14,13 @@
           v-if="widget.handleFlag != 'delete'"
           class="widget-container"
           class-name-handle="my-handle-class"
-          :style="{ 'z-index': activeIndex == index ? 1 : 0 }"
-          :active="activeIndex == index"
+          :style="{
+            'z-index': activeWidget.index == index ? 1 : 0,
+            'background-color':
+              activeWidget.index == index
+                ? 'rgba(255, 255, 255, 1)'
+                : 'rgba(255, 255, 255, 0.1)',
+          }"
           :parent="false"
           :grid="[gridWidth, gridHeight]"
           :x="widget.x"
@@ -25,9 +30,9 @@
           :z="widget.z"
           :minWidth="gridWidth * minCols"
           :minHeight="gridHeight * minRows"
+          @activated="onActivated(index)"
           @dragging="onDrag"
           @resizing="onResize"
-          @activated="onActivated(index)"
           @deactivated="onDeactivated"
         >
           <div class="widget-content">{{ widget.title }}</div>
@@ -112,9 +117,19 @@ const minCols = 2; // 面板最小的列
 const minRows = 2; // 面板最小的行
 const selectedModuleType = ref(''); // 选中的功能模块类型
 const ELMessage_DURATION = 3;
-let activeIndex = 0;
+const activeWidget = reactive({
+  index: 0,
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+  xCols: 0,
+  yRows: 0,
+  cols: 0,
+  rows: 0,
+});
 
-// 初始计算尺寸
+// 初始化定制框尺寸
 const initSize = () => {
   const editor = document.getElementById('editor');
   const width = editor.clientWidth * 0.65;
@@ -127,7 +142,7 @@ const initSize = () => {
   designWidth.value = gridWidth.value * MAX_X_NUMBER;
   designHeight.value = gridHeight.value * MAX_Y_NUMBER;
 };
-// 获取初始面板
+// 初始化定制框的数据
 const getInitWidgets = () => {
   if (homeDate) {
     homeDate.forEach((item) => {
@@ -151,7 +166,15 @@ const getInitWidgets = () => {
     });
   }
 };
-// 重新计算面板尺寸（页面尺寸调整时，例：F12）
+// 初始化定制框、添加监听页面尺寸的变化
+onMounted(() => {
+  initSize();
+  nextTick(() => {
+    getInitWidgets();
+  });
+  window.addEventListener('resize', handleResize);
+});
+// 重新计算定制框尺寸（页面尺寸调整时，例：F12）
 const refreshWidgetSize = () => {
   widgets.forEach((item) => {
     item.x = designWidth.value * ((1 / MAX_X_NUMBER) * item.xCols);
@@ -160,58 +183,102 @@ const refreshWidgetSize = () => {
     item.h = designHeight.value * ((1 / MAX_Y_NUMBER) * item.rows);
   });
 };
-
-// 激活某个格子的控制
-const activeWidget = {
-  x: 0,
-  y: 0,
+// 处理页面尺寸变化后的显示
+const handleResize = () => {
+  // 重新计算尺寸
+  initSize();
+  // 重新计算面板尺寸
+  nextTick(() => {
+    refreshWidgetSize();
+  });
 };
+
+// 修改定制框中的格子
+// 激活某个格子的控制
 const onActivated = (index: number) => {
-  activeIndex = index;
+  activeWidget.index = index;
   activeWidget.x = widgets[index].x;
   activeWidget.y = widgets[index].y;
+  activeWidget.w = widgets[index].w;
+  activeWidget.h = widgets[index].h;
+  activeWidget.xCols = widgets[index].xCols;
+  activeWidget.yRows = widgets[index].yRows;
+  activeWidget.cols = widgets[index].cols;
+  activeWidget.rows = widgets[index].rows;
 };
-// 停用某个模块
-const onDeactivated = () => {
-  const widget = widgets[activeIndex];
-  widget.x = activeWidget.x;
-  widget.y = activeWidget.y;
-  widget.xCols = activeWidget.x / gridWidth.value;
-  widget.yRows = activeWidget.y / gridHeight.value;
-};
-
-// 拖拽面板
+// 拖拽某个格子
 const onDrag = (x: number, y: number) => {
-  const widget = widgets[activeIndex];
   // 互换位置
-  for (let n = 0; n < widgets.length; n++) {
-    if (
-      widgets[n].x === x &&
-      widgets[n].y === y &&
-      widgets[n].w === widget.w &&
-      widgets[n].h === widget.h
-    ) {
-      [widgets[n].x, widget.x] = [widget.x, widgets[n].x];
-      [widgets[n].y, widget.y] = [widget.y, widgets[n].y];
-      [widgets[n].xCols, widget.xCols] = [widget.xCols, widgets[n].xCols];
-      [widgets[n].yRows, widget.yRows] = [widget.yRows, widgets[n].yRows];
+  const switchPlaces = (a: number) => {
+    for (let n = 0; n < widgets.length; n++) {
+      if (
+        widgets[n].x === x &&
+        widgets[n].y === y &&
+        widgets[n].w === widgets[a].w &&
+        widgets[n].h === widgets[a].h
+      ) {
+        [widgets[n].x, widgets[a].x] = [widgets[a].x, widgets[n].x];
+        [widgets[n].y, widgets[a].y] = [widgets[a].y, widgets[n].y];
+        [widgets[n].xCols, widgets[a].xCols] = [
+          widgets[a].xCols,
+          widgets[n].xCols,
+        ];
+        [widgets[n].yRows, widgets[a].yRows] = [
+          widgets[a].yRows,
+          widgets[n].yRows,
+        ];
+      }
     }
-  }
+  };
+  switchPlaces(activeWidget.index);
   activeWidget.x = x;
   activeWidget.y = y;
+  activeWidget.xCols = x / gridWidth.value;
+  activeWidget.yRows = y / gridHeight.value;
 };
-// 放大缩小面板
+// 停用某个格子的控制
+const onDeactivated = () => {
+  const widget = widgets[activeWidget.index];
+  let flag = false;
+  for (let n = 0; n < widgets.length; n++) {
+    if (
+      widgets[n].yRows < activeWidget.yRows + widget.rows &&
+      activeWidget.yRows < widgets[n].yRows + widgets[n].rows &&
+      widgets[n].xCols < activeWidget.xCols + widget.cols &&
+      activeWidget.xCols < widgets[n].xCols + widgets[n].cols &&
+      !(n === activeWidget.index)
+    ) {
+      flag = true;
+    }
+  }
+  if (flag) {
+    ElMessage({
+      message: '存在冲突！！！',
+      type: 'warning',
+      duration: 1000,
+    });
+  } else {
+    widget.x = activeWidget.x;
+    widget.y = activeWidget.y;
+    widget.w = activeWidget.w;
+    widget.h = activeWidget.h;
+    widget.xCols = activeWidget.xCols;
+    widget.yRows = activeWidget.yRows;
+    widget.cols = activeWidget.cols;
+    widget.rows = activeWidget.rows;
+  }
+};
+// 放大缩小某个格子
 const onResize = (x: number, y: number, width: number, height: number) => {
-  const widget = widgets[activeIndex];
-  widget.x = x;
-  widget.y = y;
-  widget.w = width;
-  widget.h = height;
-  widget.xCols = x / gridWidth.value;
-  widget.yRows = y / gridHeight.value;
-  widget.cols = width / gridWidth.value;
-  widget.rows = height / gridHeight.value;
-
+  const widget = widgets[activeWidget.index];
+  widget.x = activeWidget.x = x;
+  widget.y = activeWidget.y = y;
+  widget.w = activeWidget.w = width;
+  widget.h = activeWidget.h = height;
+  widget.xCols = activeWidget.xCols = x / gridWidth.value;
+  widget.yRows = activeWidget.yRows = y / gridHeight.value;
+  widget.cols = activeWidget.cols = width / gridWidth.value;
+  widget.rows = activeWidget.rows = height / gridHeight.value;
   // 将其他格子向下推
   const pushDown = (a: number) => {
     for (let n = 0; n < widgets.length; n++) {
@@ -276,93 +343,12 @@ const onResize = (x: number, y: number, width: number, height: number) => {
       }
     }
   };
-  pushDown(activeIndex);
-  pushUp(activeIndex);
-  pushLeft(activeIndex);
-  pushRight(activeIndex);
+  pushDown(activeWidget.index);
+  pushUp(activeWidget.index);
+  pushLeft(activeWidget.index);
+  pushRight(activeWidget.index);
 };
-
-// 选择某个格子
-const onTableRowClick = (row) => {
-  activeIndex = widgets.findIndex((item) => item.type == row.type);
-};
-
-// 添加模块
-const onAddWidget = () => {
-  if (selectedModuleType.value == '') {
-    ElMessage({
-      message: '请选择添加的功能模块',
-      type: 'error',
-      duration: ELMessage_DURATION,
-    });
-  } else {
-    // 判断相同类型模块是否已经存在
-    const index = widgets.findIndex(
-      (item) =>
-        item.type == selectedModuleType.value && item.handleFlag != 'delete'
-    );
-    if (index != -1) {
-      ElMessage({
-        message: '该功能模块已经存在',
-        type: 'error',
-        duration: ELMessage_DURATION,
-      });
-    } else {
-      const index = DASHBOARD_WIDGET_TYPE.findIndex(
-        (item) => item.type == selectedModuleType.value
-      );
-      const selectedModule = DASHBOARD_WIDGET_TYPE[index];
-      let maxID = Math.max(...homeDate.map((x) => x.id));
-      widgets.push({
-        handleFlag: 'add',
-        title: selectedModule.title,
-        remark: selectedModule.remark,
-        xCols: 0,
-        yRows: 0,
-        cols: 2,
-        rows: 2,
-        x: 0,
-        y: 0,
-        h: gridHeight.value * 2,
-        w: gridWidth.value * 2,
-        z: 0,
-        // dashBoardID: dashboardInfo.id,
-        id: ++maxID,
-        type: selectedModule.type,
-        typeID: selectedModule.typeID,
-        minCols: minCols,
-        minRows: minRows,
-      });
-      // 新增的自动获取焦点
-      activeIndex = widgets.length - 1;
-    }
-  }
-};
-// 删除模块
-const onDeleteWidget = (widget) => {
-  ElMessageBox.confirm('确定删除【' + widget.title + '】面板', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-    dangerouslyUseHTMLString: true,
-  })
-    .then(() => {
-      switch (widget.handleFlag) {
-        case 'update': {
-          widget.handleFlag = 'delete';
-          break;
-        }
-        case 'add': {
-          const index = widgets.findIndex((item) => item.type == widget.type);
-          widgets.splice(index, 1);
-          break;
-        }
-      }
-    })
-    .catch(() => {});
-};
-
-// 保存（外部页面调用）
+// 保存修改（外部页面调用）
 const onSaveWidgets = () => {
   widgets.forEach((item) => {
     // 逐个保存面板信息
@@ -418,32 +404,97 @@ const onSaveWidgets = () => {
   emit('changeHome');
 };
 
-// 表格里面的数据
+// 表格
+// 在表格中选择某个格子
+const onTableRowClick = (row) => {
+  activeWidget.index = widgets.findIndex((item) => item.type == row.type);
+};
+
+// 添加某个格子
+const onAddWidget = () => {
+  if (selectedModuleType.value == '') {
+    ElMessage({
+      message: '请选择添加的功能模块',
+      type: 'error',
+      duration: ELMessage_DURATION,
+    });
+  } else {
+    // 判断相同类型模块是否已经存在
+    const index = widgets.findIndex(
+      (item) =>
+        item.type == selectedModuleType.value && item.handleFlag != 'delete'
+    );
+    if (index != -1) {
+      ElMessage({
+        message: '该功能模块已经存在',
+        type: 'error',
+        duration: ELMessage_DURATION,
+      });
+    } else {
+      const index = DASHBOARD_WIDGET_TYPE.findIndex(
+        (item) => item.type == selectedModuleType.value
+      );
+      const selectedModule = DASHBOARD_WIDGET_TYPE[index];
+      let maxID = Math.max(...homeDate.map((x) => x.id));
+      widgets.push({
+        handleFlag: 'add',
+        title: selectedModule.title,
+        remark: selectedModule.remark,
+        xCols: 0,
+        yRows: 0,
+        cols: 2,
+        rows: 2,
+        x: 0,
+        y: 0,
+        h: gridHeight.value * 2,
+        w: gridWidth.value * 2,
+        z: 0,
+        // dashBoardID: dashboardInfo.id,
+        id: ++maxID,
+        type: selectedModule.type,
+        typeID: selectedModule.typeID,
+        minCols: minCols,
+        minRows: minRows,
+      });
+      // 新增的自动获取焦点
+      activeWidget.index = widgets.length - 1;
+    }
+  }
+};
+// 删除某个格子
+const onDeleteWidget = (widget) => {
+  ElMessageBox.confirm('确定删除【' + widget.title + '】面板', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+    dangerouslyUseHTMLString: true,
+  })
+    .then(() => {
+      switch (widget.handleFlag) {
+        case 'update': {
+          widget.handleFlag = 'delete';
+          break;
+        }
+        case 'add': {
+          const index = widgets.findIndex((item) => item.type == widget.type);
+          widgets.splice(index, 1);
+          break;
+        }
+      }
+    })
+    .catch(() => {});
+};
+
+// 展示表格里面的数据
 const designWidgets = computed(() => {
   return widgets.filter((item) => item.handleFlag != 'delete');
 });
 
-// 处理resize后的显示
-const handleResize = () => {
-  // 重新计算尺寸
-  initSize();
-  // 重新计算面板尺寸
-  nextTick(() => {
-    refreshWidgetSize();
-  });
-};
-
-onMounted(() => {
-  initSize();
-  nextTick(() => {
-    getInitWidgets();
-  });
-  window.addEventListener('resize', handleResize);
-});
+// 清除监听
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
-
+// 暴露保存按钮的方法
 defineExpose({
   onSaveWidgets,
 });
@@ -469,14 +520,14 @@ defineExpose({
       linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     .widget-container {
       display: inline-grid;
-      background-color: #999999;
-      border: 1px solid #000;
-      color: #fff;
+      border: 1.5px solid #222222;
+      color: #000000;
       font-size: 20px;
       font-weight: bold;
       font-family: YouYuan;
+
       .widget-content {
-        padding: 14px;
+        padding: 20px;
         cursor: move;
         display: flex;
         align-items: center;
@@ -498,6 +549,8 @@ defineExpose({
     }
   }
 }
+
+// 方块处理
 .my-handle-class {
   position: absolute;
   -webkit-transition: all 300ms linear;
@@ -506,8 +559,8 @@ defineExpose({
 }
 
 .my-handle-class-tl {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   top: 0;
   left: 0;
   z-index: 100;
@@ -515,7 +568,7 @@ defineExpose({
 }
 
 .my-handle-class-tm {
-  height: 14px;
+  height: 20px;
   width: 100%;
   top: 0;
   left: 0;
@@ -523,8 +576,8 @@ defineExpose({
 }
 
 .my-handle-class-tr {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   top: 0;
   right: 0;
   z-index: 100;
@@ -533,7 +586,7 @@ defineExpose({
 
 .my-handle-class-ml {
   height: 100%;
-  width: 14px;
+  width: 20px;
   top: 0;
   left: 0;
   cursor: w-resize;
@@ -541,15 +594,15 @@ defineExpose({
 
 .my-handle-class-mr {
   height: 100%;
-  width: 14px;
+  width: 20px;
   top: 0;
   right: 0;
   cursor: e-resize;
 }
 
 .my-handle-class-bl {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   bottom: 0;
   left: 0;
   z-index: 100;
@@ -557,7 +610,7 @@ defineExpose({
 }
 
 .my-handle-class-bm {
-  height: 14px;
+  height: 20px;
   width: 100%;
   bottom: 0;
   left: 0;
@@ -565,8 +618,8 @@ defineExpose({
 }
 
 .my-handle-class-br {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   bottom: 0;
   right: 0;
   z-index: 100;
