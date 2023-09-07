@@ -347,6 +347,7 @@ const onResize = (x: number, y: number, width: number, height: number) => {
   pushUp(activeWidget.index);
   pushLeft(activeWidget.index);
   pushRight(activeWidget.index);
+  console.log(height);
 };
 // 保存修改（外部页面调用）
 const onSaveWidgets = () => {

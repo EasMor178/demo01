@@ -36,15 +36,21 @@
         </el-icon>
         <template #title>审批管理</template>
       </el-menu-item>
+      <el-menu-item index="5" @click="toPage('/xlsx')">
+        <el-icon>
+          <setting />
+        </el-icon>
+        <template #title>表格页面</template>
+      </el-menu-item>
     </div>
     <div>
-      <el-menu-item index="5" v-show="isCollapse">
+      <el-menu-item index="6" v-show="isCollapse">
         <el-icon>
           <setting />
         </el-icon>
         <template #title>管理后台</template>
       </el-menu-item>
-      <el-menu-item index="6" @click="disCollapse" v-show="isCollapse">
+      <el-menu-item index="7" @click="disCollapse" v-show="isCollapse">
         <el-icon>
           <Fold />
         </el-icon>

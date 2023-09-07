@@ -5,6 +5,7 @@
       style="cursor: move"
       @activated="onActivated(index)"
       @deactivated="onDeactivated(index)"
+      @resizing="onResize"
     >
       <p>
         You can provide a default class name for handle using the
@@ -23,5 +24,8 @@ const onActivated = (index: number) => {
 };
 const onDeactivated = (index: number) => {
   console.log('Deactivated', index);
+};
+const onResize = (x: number, y: number, width: number, height: number) => {
+  console.log(x, y, width, height);
 };
 </script>

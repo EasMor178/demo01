@@ -22,6 +22,10 @@ export default createRouter({
       component: () => import('@/pages/other02/index.vue'),
     },
     {
+      path: '/xlsx',
+      component: () => import('@/pages/xlsx/index.vue'),
+    },
+    {
       path: '/',
       redirect: '/workspace',
     },
