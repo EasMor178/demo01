@@ -9,7 +9,9 @@
     <span>childNum:</span>
     <div>
       <button @click="cNum.cSubtract">-</button>
-      {{ childNum }}
+      <!-- <span v-if="cNum.childNum">
+        {{ cNum.childNum }}
+      </span> -->
       <button @click="cNum.cAdd">+</button>
     </div>
   </div>
@@ -40,7 +42,6 @@ const fSubtract = () => {
 const getChildNum = (num: number) => {
   childNum.value = num;
 };
-
 const cNum = ref();
 </script>
 

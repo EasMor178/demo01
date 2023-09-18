@@ -1,5 +1,5 @@
 <template>
-  <div class="container1">
+  <div class="app">
     <Menu />
     <div class="context">
       <div class="top">
@@ -11,13 +11,9 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-// import Top from '@/components/top/index.vue';
-// import Menu from "@/components/menu/index.vue";
-// import home from "./pages/home/index.vue";
-</script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
-.container1 {
+.app {
   display: flex;
 
   .context {

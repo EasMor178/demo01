@@ -14,59 +14,43 @@
       </div>
     </div>
     <div class="item">
-      <el-menu-item index="1" @click="toPage('/workspace')">
+      <el-menu-item index="1" @click="toPage('/Workbench')">
         <el-icon>
           <SuitcaseLine />
         </el-icon>
         <template #title>工作台</template>
       </el-menu-item>
-      <el-menu-item index="2" @click="toPage('/automate')">
+      <el-menu-item index="2" @click="toPage('/Terminal')">
         <el-icon><icon-menu /></el-icon>
         <template #title>终端管理</template>
       </el-menu-item>
-      <el-menu-item index="3" @click="toPage('/other01')">
+      <el-menu-item index="3" @click="toPage('/Strategy')">
         <el-icon>
           <document />
         </el-icon>
         <template #title>策略管理</template>
       </el-menu-item>
-      <el-menu-item index="4" @click="toPage('/other02')">
+      <el-menu-item index="4" @click="toPage('/Section')">
         <el-icon>
           <setting />
         </el-icon>
-        <template #title>审批管理</template>
+        <template #title>部门管理</template>
       </el-menu-item>
-      <el-menu-item index="5" @click="toPage('/xlsx')">
+      <el-menu-item index="5" @click="toPage('/Form')">
         <el-icon>
           <setting />
         </el-icon>
-        <template #title>表格页面</template>
+        <template #title>在线表格</template>
       </el-menu-item>
     </div>
-    <div>
-      <el-menu-item index="6" v-show="isCollapse">
-        <el-icon>
-          <setting />
-        </el-icon>
-        <template #title>管理后台</template>
-      </el-menu-item>
-      <el-menu-item index="7" @click="disCollapse" v-show="isCollapse">
-        <el-icon>
-          <Fold />
-        </el-icon>
-        <template #title>隐藏</template>
-      </el-menu-item>
-    </div>
-    <div class="bottom" v-show="!isCollapse">
-      <a href="#">
+    <div class="bottom">
+      <a href="#" v-show="!isCollapse">
         <setting style="width: 20px; color: white" />
         <span style="color: white">管理后台</span>
       </a>
-      <span class="button" @click="disCollapse" v-show="!isCollapse">
-        <!-- <el-icon> -->
-        <!-- <Expand v-show="isCollapse" style="width: 20px; color: white;" /> -->
-        <Fold style="width: 20px; color: white" />
-        <!-- </el-icon> -->
+      <span class="button" @click="disCollapse">
+        <Expand v-show="isCollapse" class="icon" />
+        <Fold v-show="!isCollapse" class="icon" />
       </span>
     </div>
   </el-menu>
@@ -79,10 +63,9 @@ import {
   SuitcaseLine,
   Setting,
   Fold,
-  // Expand
+  Expand,
 } from '@element-plus/icons-vue';
 
-import { ref } from 'vue';
 const isCollapse = ref<boolean>(false);
 const disCollapse = () => {
   isCollapse.value = !isCollapse.value;
@@ -99,13 +82,10 @@ const toPage = (url: string) => {
 
 <style scoped lang="scss">
 .el-menu {
-  display: flex;
-  flex-direction: column;
-
   height: 100vh;
 
   .top {
-    height: 72px;
+    height: 70px;
     display: flex;
     align-items: center;
 
@@ -130,7 +110,7 @@ const toPage = (url: string) => {
   }
 
   .item {
-    flex: 1;
+    height: calc(100vh - 120px);
   }
 
   .bottom {
@@ -138,12 +118,11 @@ const toPage = (url: string) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    height: 50px;
     border-top: 1px solid rgb(118, 118, 118);
 
     a {
       display: flex;
-      // max-height: 0px;
       white-space: nowrap;
       align-items: center;
       overflow: hidden;
@@ -151,19 +130,31 @@ const toPage = (url: string) => {
 
     .button {
       height: 30px;
-      width: 30px;
-      // float: right;
-      // margin: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 40px;
       border-radius: 5px;
+      transition: 0.25s;
+      position: relative;
+      .icon {
+        position: absolute;
+        height: 24px;
+        width: 24px;
+        top: 50%;
+        left: 50%;
+        margin-top: -12px;
+        margin-left: -12px;
+        color: white;
+      }
 
       &:hover {
         background-color: #3f3f3f;
+        cursor: pointer;
       }
     }
   }
+}
+.el-menu-item {
+  height: 50px;
+  margin: 2px;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {

@@ -4,30 +4,30 @@ export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/workspace',
-      component: () => import('@/pages/workspace/index.vue'),
+      path: '/Workbench',
+      component: () => import('@/pages/Workbench/index.vue'),
       children: [],
     },
     {
-      path: '/automate',
-      component: () => import('@/pages/automate/index.vue'),
+      path: '/Terminal',
+      component: () => import('@/pages/Terminal/index.vue'),
       children: [],
     },
     {
-      path: '/other01',
-      component: () => import('@/pages/other01/index.vue'),
+      path: '/Strategy',
+      component: () => import('@/pages/Strategy/index.vue'),
     },
     {
-      path: '/other02',
-      component: () => import('@/pages/other02/index.vue'),
+      path: '/Section',
+      component: () => import('@/pages/Section/index.vue'),
     },
     {
-      path: '/xlsx',
-      component: () => import('@/pages/xlsx/index.vue'),
+      path: '/Form',
+      component: () => import('@/pages/Form/index.vue'),
     },
     {
       path: '/',
-      redirect: '/workspace',
+      redirect: '/Workbench',
     },
   ],
   //滚动行为

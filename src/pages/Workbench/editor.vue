@@ -238,6 +238,10 @@ const onDrag = (x: number, y: number) => {
 };
 // 停用某个格子的控制
 const onDeactivated = () => {
+  unPushDownDate = [{ Aid: 0, rows: 0, Bid: 0 }];
+  unPushUpDate = [{ Aid: 0, rows: 0, Bid: 0 }];
+  unPushLeftDate = [{ Aid: 0, cols: 0, Bid: 0 }];
+  unPushRightDate = [{ Aid: 0, cols: 0, Bid: 0 }];
   const widget = widgets[activeWidget.index];
   let flag = false;
   for (let n = 0; n < widgets.length; n++) {
@@ -269,6 +273,10 @@ const onDeactivated = () => {
   }
 };
 // 放大缩小某个格子
+let unPushDownDate = [{ Aid: 0, rows: 0, Bid: 0 }];
+let unPushUpDate = [{ Aid: 0, rows: 0, Bid: 0 }];
+let unPushLeftDate = [{ Aid: 0, cols: 0, Bid: 0 }];
+let unPushRightDate = [{ Aid: 0, cols: 0, Bid: 0 }];
 const onResize = (x: number, y: number, width: number, height: number) => {
   const widget = widgets[activeWidget.index];
   widget.x = activeWidget.x = x;
@@ -289,9 +297,20 @@ const onResize = (x: number, y: number, width: number, height: number) => {
           widgets[n].cols + widgets[n].xCols - 1 < widgets[a].xCols
         )
       ) {
+        unPushDownDate.unshift({ Aid: a, rows: widgets[a].rows, Bid: n });
         widgets[n].y += gridHeight.value;
         widgets[n].yRows += 1;
         pushDown(n);
+      }
+    }
+  };
+  const unPushDown = () => {
+    if (unPushDownDate.length > 1) {
+      let n = unPushDownDate[0].rows - widgets[unPushDownDate[0].Aid].rows;
+      if (n > 0) {
+        widgets[unPushDownDate[0].Bid].y -= n * gridHeight.value;
+        widgets[unPushDownDate[0].Bid].yRows -= n;
+        unPushDownDate.shift();
       }
     }
   };
@@ -305,9 +324,20 @@ const onResize = (x: number, y: number, width: number, height: number) => {
           widgets[n].cols + widgets[n].xCols - 1 < widgets[a].xCols
         )
       ) {
+        unPushUpDate.unshift({ Aid: a, rows: widgets[a].rows, Bid: n });
         widgets[n].y -= gridHeight.value;
         widgets[n].yRows -= 1;
         pushUp(n);
+      }
+    }
+  };
+  const unPushUp = () => {
+    if (unPushUpDate.length > 1) {
+      let n = unPushUpDate[0].rows - widgets[unPushUpDate[0].Aid].rows;
+      if (n > 0) {
+        widgets[unPushUpDate[0].Bid].y += n * gridHeight.value;
+        widgets[unPushUpDate[0].Bid].yRows += n;
+        unPushUpDate.shift();
       }
     }
   };
@@ -321,9 +351,20 @@ const onResize = (x: number, y: number, width: number, height: number) => {
           widgets[n].yRows + widgets[n].rows - 1 < widgets[a].yRows
         )
       ) {
+        unPushLeftDate.unshift({ Aid: a, cols: widgets[a].cols, Bid: n });
         widgets[n].x -= gridWidth.value;
         widgets[n].xCols -= 1;
         pushLeft(n);
+      }
+    }
+  };
+  const unPushLeft = () => {
+    if (unPushLeftDate.length > 1) {
+      let n = unPushLeftDate[0].cols - widgets[unPushLeftDate[0].Aid].cols;
+      if (n > 0) {
+        widgets[unPushLeftDate[0].Bid].x += n * gridWidth.value;
+        widgets[unPushLeftDate[0].Bid].xCols += n;
+        unPushLeftDate.shift();
       }
     }
   };
@@ -337,9 +378,20 @@ const onResize = (x: number, y: number, width: number, height: number) => {
           widgets[n].yRows + widgets[n].rows - 1 < widgets[a].yRows
         )
       ) {
+        unPushRightDate.unshift({ Aid: a, cols: widgets[a].cols, Bid: n });
         widgets[n].x += gridWidth.value;
         widgets[n].xCols += 1;
         pushRight(n);
+      }
+    }
+  };
+  const unPushRight = () => {
+    if (unPushRightDate.length > 1) {
+      let n = unPushRightDate[0].cols - widgets[unPushRightDate[0].Aid].cols;
+      if (n > 0) {
+        widgets[unPushRightDate[0].Bid].x -= n * gridWidth.value;
+        widgets[unPushRightDate[0].Bid].xCols -= n;
+        unPushRightDate.shift();
       }
     }
   };
@@ -347,7 +399,10 @@ const onResize = (x: number, y: number, width: number, height: number) => {
   pushUp(activeWidget.index);
   pushLeft(activeWidget.index);
   pushRight(activeWidget.index);
-  console.log(height);
+  unPushDown();
+  unPushUp();
+  unPushLeft();
+  unPushRight();
 };
 // 保存修改（外部页面调用）
 const onSaveWidgets = () => {

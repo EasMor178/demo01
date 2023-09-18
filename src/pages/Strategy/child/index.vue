@@ -2,23 +2,9 @@
   <div class="bob">
     <span>child:</span>
     <div>
-      <button
-        @click="
-          cSubtract();
-          emit('getCNum', childNum);
-        "
-      >
-        -
-      </button>
+      <button @click="cSubtract()">-</button>
       {{ childNum }}
-      <button
-        @click="
-          cAdd();
-          emit('getCNum', childNum);
-        "
-      >
-        +
-      </button>
+      <button @click="cAdd()">+</button>
     </div>
     <span>fatherNum:</span>
     <div>
@@ -45,7 +31,7 @@ defineProps({ fNum: Number });
 const emit = defineEmits(['getCNum', 'faAdd', 'faSubtract']);
 emit('getCNum', childNum.value);
 //发送数据给父组件
-defineExpose({ cSubtract, cAdd });
+defineExpose({ cSubtract, cAdd, childNum });
 </script>
 
 <style scoped>

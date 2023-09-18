@@ -9,10 +9,12 @@
     :limit="1"
   >
     <i class="el-icon-upload"></i>
-    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    <div class="el-upload__text">
+      将 Excel 文件拖到此处，或<em>点击上传</em>
+    </div>
   </el-upload>
-  <main style="padding: 20px">
-    <el-table :data="tableData" border style="width: 100%">
+  <main style="padding: 20px" v-if="tableData[0]">
+    <el-table :data="tableData" border style="width: 100">
       <el-table-column prop="USERID" label="userId" width="80" />
       <el-table-column prop="USERNAME" label="userName" width="180" />
       <el-table-column prop="ORG" label="ore" width="180" />
@@ -48,7 +50,7 @@ const uploadChange = async (e) => {
     const ws = xlsx.utils.sheet_to_json(workbook.Sheets[wsName]);
     console.log(ws);
     tableData.value.push(...ws);
-    console.log(tableData);
+    console.log(tableData.value);
   };
   fileReader.readAsBinaryString(files);
 };
